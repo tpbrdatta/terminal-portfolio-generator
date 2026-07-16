@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{NAME}} | Portfolio</title>
+<meta name="description" content="{{BIO}}">
+
+<!-- Primary Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+  /* ============================================================
+     THE SAME DESIGN TOKENS FROM YOUR PORTFOLIO
+     ============================================================ */
+  :root {
+    --bg: #0B1220;
+    --bg-raised: #101A2E;
+    --ink: #E9EDF5;
+    --ink-dim: #8B96AC;
+    --line: #223051;
+    --gold: {{ACCENT_COLOR}}; /* Injected dynamically from the user's color choice */
+    --gold-soft: rgba(212,162,76,0.12);
+    --green: #4CAE7F;
+    --keyword: #E5645C;
+    --string: #4CAE7F;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Space Grotesk', sans-serif;
+    line-height: 1.5;
+  }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+  a { color: inherit; text-decoration: none; }
+
+  /* Top Tab System */
+  .tabbar {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center;
+    background: var(--bg-raised);
+    border-bottom: 1px solid var(--line);
+    overflow-x: auto;
+  }
+  .tab {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--ink-dim);
+    padding: 14px 18px;
+    border-right: 1px solid var(--line);
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .tab.active { color: var(--gold); background: var(--bg); border-bottom: 2px solid var(--gold); }
+
+  section { padding: 80px 24px 40px; max-width: 880px; margin: 0 auto; scroll-margin-top: 52px; }
+
+  /* Profile Header */
+  .status-line {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--green);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(76,174,127,0.08);
+    border: 1px solid rgba(76,174,127,0.25);
+    padding: 6px 12px;
+    border-radius: 20px;
+    margin-bottom: 24px;
+  }
+  h1 { font-size: clamp(38px, 6vw, 64px); font-weight: 700; }
+  .role-line { margin-top: 10px; font-size: 18px; color: var(--ink-dim); font-family: 'JetBrains Mono', monospace; }
+  .bio { margin-top: 24px; max-width: 620px; color: var(--ink-dim); }
+
+  /* Cards Setup (now.log) */
+  .sec-label { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--gold); margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+  .sec-label::before { content: ''; width: 14px; height: 1px; background: var(--gold); }
+  h2 { font-size: 28px; font-weight: 600; margin-bottom: 20px; }
+  
+  .now-card {
+    background: var(--bg-raised); border: 1px solid var(--line); border-radius: 12px; padding: 24px; position: relative;
+  }
+  .now-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--gold); }
+  .now-card p { color: var(--ink-dim); font-size: 15px; }
+
+  /* Chip List */
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .chip { font-family: 'JetBrains Mono', monospace; font-size: 13px; padding: 6px 12px; border-radius: 6px; background: var(--gold-soft); border: 1px solid rgba(212,162,76,0.25); color: var(--gold); }
+
+  /* Dynamic GitHub Layout Grid */
+  .proj-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; }
+  @media (max-width: 640px) { .proj-grid { grid-template-columns: 1fr; } }
+  .proj-card { background: var(--bg-raised); border: 1px solid var(--line); border-radius: 12px; padding: 20px; display: block; }
+  .proj-card .name { font-family: 'JetBrains Mono', monospace; font-weight: 600; color: #fff; margin-bottom: 6px; }
+  .proj-card .desc { color: var(--ink-dim); font-size: 13.5px; }
+
+  /* Progress Display Logic (LeetCode) */
+  .progress-box { display: {{LEETCODE_DISPLAY}}; background: var(--bg-raised); border: 1px solid var(--line); border-radius: 12px; padding: 24px; max-width: 400px; }
+  .stat-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; }
+  .bar-track { height: 6px; background: var(--line); border-radius: 4px; overflow: hidden; }
+  .bar-fill { height: 100%; background: var(--gold); }
+
+  /* Terminal Window Quiz Simulation Engine UI */
+  .win { background: var(--bg-raised); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; max-width: 600px; margin-top: 10px; }
+  .win-bar { display: flex; align-items: center; padding: 12px 16px; background: rgba(255,255,255,0.02); border-bottom: 1px solid var(--line); }
+  .win-body { padding: 24px; }
+  .opt { width: 100%; text-align: left; padding: 12px 16px; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; color: var(--ink); margin-bottom: 8px; cursor: pointer; display: flex; gap: 10px; }
+  .opt:hover { border-color: var(--gold); }
+  .opt.correct { background: rgba(76,174,127,0.12); border-color: var(--green); color: var(--green); }
+  .opt.wrong { background: rgba(229,100,92,0.12); border-color: var(--keyword); color: var(--keyword); }
+  
+  /* Contact / Footer Options */
+  .contact-box { display: {{EMAIL_DISPLAY}}; align-items: center; background: var(--bg-raised); border: 1px solid var(--line); padding: 14px 18px; border-radius: 10px; max-width: 320px; font-family: 'JetBrains Mono', monospace; }
+
+  footer { text-align: center; padding: 60px 24px; color: var(--ink-dim); font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+</style>
+</head>
+<body>
+
+<div class="tabbar">
+  <a class="tab active" href="#about">about.md</a>
+  <a class="tab" href="#now">now.log</a>
+  <a class="tab" href="#work">projects.js</a>
+  <a class="tab" href="#quiz">quiz.exe</a>
+</div>
+
+<section id="about">
+  <div class="status-line"><span>●</span><span>{{STATUS_TEXT}}</span></div>
+  <h1>I'm <span style="color: var(--gold)">{{NAME}}</span></h1>
+  <div class="role-line">{{TITLE}}</div>
+  <p class="bio">{{BIO}}</p>
+</section>
+
+<section id="now">
+  <div class="sec-label">STATUS_LOG</div>
+  <h2>What I'm doing now</h2>
+  <div class="now-card">
+    <p>{{CURRENT_ACTIVITY}}</p>
+  </div>
+
+  <h3 style="margin-top: 32px; font-size: 16px;" class="mono">// Core Toolkit</h3>
+  <div class="chips">
+    {{TECH_STACK_CHIPS}}
+  </div>
+</section>
+
+<section id="work">
+  <div class="sec-label">REPOSITORIES</div>
+  <h2>Featured work</h2>
+  <div id="loading" class="mono" style="font-size: 14px; color: var(--ink-dim);">Connecting to GitHub API...</div>
+  <div class="proj-grid" id="github-repos" style="display: none;"></div>
+
+  <!-- Dynamic LeetCode Tracker Module Box -->
+  <div style="margin-top: 40px;">
+    <div class="progress-box">
+      <div class="mono" style="font-size: 14px; font-weight: 600; margin-bottom: 12px;">LeetCode Profile Tracker</div>
+      <div id="lc-loading" class="mono" style="font-size: 13px; color: var(--ink-dim);">Fetching profile metrics...</div>
+      <div id="lc-stats" style="display: none;">
+        <div class="stat-row"><span style="color: var(--ink-dim);">Total Problems Solved</span><span class="mono" id="lc-total">—</span></div>
+        <div class="bar-track"><div class="bar-fill" id="lc-bar" style="width: 0%"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="quiz">
+  <div class="sec-label">APPLICATION</div>
+  <h2>Personality Quiz Matrix</h2>
+  <div class="win">
+    <div class="win-bar"><span class="mono" style="font-size: 12px; color: var(--ink-dim);">interactive_test_runner.js</span></div>
+    <div class="win-body">
+      <div class="mono" id="q-text" style="font-size: 16px; margin-bottom: 20px;">Initializing quiz...</div>
+      <div id="options-box"></div>
+      <div class="mono" id="feedback" style="margin-top: 14px; min-height: 18px; font-size: 13px;"></div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="sec-label">COMMUNICATION</div>
+  <h2>Get in touch</h2>
+  <a class="contact-box" href="mailto:{{CONTACT_EMAIL}}">
+    <span>✉ {{CONTACT_EMAIL}}</span>
+  </a>
+</section>
+
+<footer>
+  generated automatically via profile form pipelines
+</footer>
+
+<script>
+  // Runtime operational configs injected by Python processing script engine
+  const GITHUB_HANDLE = "{{GITHUB_USERNAME}}";
+  const LEETCODE_HANDLE = "{{LEETCODE_USERNAME}}";
+  const INTERACTIVE_QUIZ = {{QUIZ_DATA_JSON}};
+
+  // 1. Live Fetch GitHub Repos Pipeline
+  if (GITHUB_HANDLE) {
+    fetch(`https://api.github.com/users/${GITHUB_HANDLE}/repos?sort=updated&per_page=4`)
+      .then(res => res.ok ? res.json() : Promise.reject())
+      .then(repos => {
+        document.getElementById('loading').style.display = 'none';
+        const grid = document.getElementById('github-repos');
+        grid.style.display = 'grid';
+        repos.forEach(repo => {
+          const card = document.createElement('a');
+          card.className = 'proj-card';
+          card.href = repo.html_url;
+          card.target = '_blank';
+          card.innerHTML = `
+            <div class="name">${repo.name}</div>
+            <div class="desc">${repo.description || 'No description provided.'}</div>
+          `;
+          grid.appendChild(card);
+        });
+      }).catch(() => { document.getElementById('loading').textContent = "Failed to load active repositories."; });
+  }
+
+  // 2. Live Fetch LeetCode Analytics Pipeline
+  if (LEETCODE_HANDLE) {
+    fetch(`https://leetcode-stats-inky.vercel.app/?username=${LEETCODE_HANDLE}`)
+      .then(res => res.ok ? res.json() : Promise.reject())
+      .then(data => {
+        document.getElementById('lc-loading').style.display = 'none';
+        document.getElementById('lc-stats').style.display = 'block';
+        document.getElementById('lc-total').textContent = data.totalSolved;
+        const percent = data.totalQuestions ? Math.round((data.totalSolved / data.totalQuestions) * 100) : 0;
+        document.getElementById('lc-bar').style.width = percent + '%';
+      }).catch(() => { document.getElementById('lc-loading').textContent = "Metrics unavailable."; });
+  }
+
+  // 3. Fully Automated Quiz Engine
+  let currentIdx = 0;
+  function runEngine() {
+    if (currentIdx >= INTERACTIVE_QUIZ.length) {
+      document.getElementById('q-text').textContent = "✓ Evaluation completed. All system parameters valid.";
+      document.getElementById('options-box').innerHTML = "";
+      return;
+    }
+    const currentQuestion = INTERACTIVE_QUIZ[currentIdx];
+    document.getElementById('q-text').textContent = `// Question ${currentIdx + 1}: ${currentQuestion.q}`;
+    
+    const box = document.getElementById('options-box');
+    box.innerHTML = "";
+    
+    const elements = [currentQuestion.correct, ...currentQuestion.decoys].sort(() => Math.random() - 0.5);
+    elements.forEach((opt, idx) => {
+      const button = document.createElement('button');
+      button.className = 'opt';
+      button.innerHTML = `<span style="color: var(--ink-dim);">${String.fromCharCode(65 + idx)}.</span> ${opt}`;
+      button.onclick = () => {
+        const targets = box.querySelectorAll('.opt');
+        targets.forEach(b => b.disabled = true);
+        
+        if (opt === currentQuestion.correct) {
+          button.classList.add('correct');
+          document.getElementById('feedback').style.color = 'var(--green)';
+          document.getElementById('feedback').textContent = "Success status code: 200 OK";
+          setTimeout(() => { currentIdx++; runEngine(); document.getElementById('feedback').textContent = ""; }, 1200);
+        } else {
+          button.classList.add('wrong');
+          document.getElementById('feedback').style.color = 'var(--keyword)';
+          document.getElementById('feedback').textContent = `Runtime Error: Expected "${currentQuestion.correct}"`;
+          setTimeout(() => { currentIdx++; runEngine(); document.getElementById('feedback').textContent = ""; }, 2000);
+        }
+      };
+      box.appendChild(button);
+    });
+  }
+  
+  if(INTERACTIVE_QUIZ.length > 0) { runEngine(); }
+</script>
+
+</body>
+</html>

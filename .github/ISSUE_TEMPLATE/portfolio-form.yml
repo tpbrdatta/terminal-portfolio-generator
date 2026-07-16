@@ -1,0 +1,109 @@
+name: "🚀 Create/Update My Portfolio"
+description: "Fill out this form to generate your terminal portfolio website instantly."
+title: "[Portfolio Setup]: Update Profile"
+labels: ["portfolio-builder"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ### Welcome to the Profile Generator!
+        Please fill out the sections below. Required sections must be filled. Optional cards will be automatically hidden from your website if you leave them blank.
+
+  - type: input
+    id: name
+    attributes:
+      label: Full Name
+      placeholder: "e.g., Alex Mercer"
+    validations:
+      required: true
+
+  - type: input
+    id: title
+    attributes:
+      label: Job Title / Core Focus
+      placeholder: "e.g., Computer Science Student / Backend Engineer"
+    validations:
+      required: true
+
+  - type: input
+    id: current_status
+    attributes:
+      label: Current Status Header
+      placeholder: "e.g., 4th Year CS Student at Tech University"
+    validations:
+      required: true
+
+  - type: textarea
+    id: bio
+    attributes:
+      label: Biography
+      placeholder: "Write a detailed summary about who you are, what you enjoy building, and your philosophy."
+    validations:
+      required: true
+
+  - type: textarea
+    id: current_activity
+    attributes:
+      label: What You Are Doing Now (now.log)
+      placeholder: "e.g., Finishing my degree, optimizing open-source database scripts, and learning systems programming."
+    validations:
+      required: true
+
+  - type: input
+    id: accent_color
+    attributes:
+      label: Accent Theme Color (Hex)
+      placeholder: "e.g., #D4A24C (Gold), #4CAE7F (Emerald), #3B82F6 (Blue)"
+    validations:
+      required: true
+
+  - type: input
+    id: github_username
+    attributes:
+      label: GitHub Username
+    validations:
+      required: true
+
+  - type: input
+    id: leetcode_username
+    attributes:
+      label: LeetCode Username (Optional)
+      placeholder: "Leave blank to hide the LeetCode tracking panel"
+    validations:
+      required: false
+
+  - type: input
+    id: contact_email
+    attributes:
+      label: Contact Email Address (Optional)
+      placeholder: "e.g., hello@example.com"
+    validations:
+      required: false
+
+  - type: input
+    id: tech_stack
+    attributes:
+      label: Tech Stack & Tools (Comma separated)
+      placeholder: "Python, SQL, C, Linux, Git, Docker, VS Code"
+    validations:
+      required: true
+
+  - type: textarea
+    id: quiz_data
+    attributes:
+      label: Personality Quiz Configuration (Up to 4 Questions)
+      description: "Follow the syntax exactly. Use 'Q:' for the question, 'A:' for the single correct answer, and 'X:' for three wrong answers separated by commas. Separate each question block using three dashes (---)."
+      value: |
+        Q: What is my absolute favorite coding language?
+        A: Python
+        X: JavaScript, C++, Assembly
+        ---
+        Q: What time of day do I usually commit code?
+        A: 3:00 AM (Night Owl)
+        X: 6:00 AM (Early Riser), 12:00 PM (Lunch Break), 9:00 AM sharp
+        ---
+        Q: What is my preferred workspace setup element?
+        A: Massive water bottle
+        X: Mechanical keyboard collection, RGB strip light overload, Dual vertical monitors
+    validations:
+      required: true
