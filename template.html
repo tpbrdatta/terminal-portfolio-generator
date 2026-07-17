@@ -3,9 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{{NAME}} | Portfolio</title>
-<meta name="description" content="{{TITLE}} - Terminal Portfolio Setup">
-
+<title>Portfolio Workspace</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
@@ -48,6 +46,8 @@
   .dots span:nth-child(1) { background: #E5645C; }
   .dots span:nth-child(2) { background: #E5B45C; }
   .dots span:nth-child(3) { background: #4CAE7F; }
+  
+  .tabs-wrapper { display: flex; flex-grow: 1; overflow-x: auto; }
   .tab {
     font-family: 'JetBrains Mono', monospace;
     font-size: 13px;
@@ -61,39 +61,39 @@
   .tab:hover { color: var(--ink); background: rgba(255,255,255,0.02); }
   .tab.active { color: var(--gold); background: var(--bg); border-bottom: 2px solid var(--gold); margin-bottom: -1px; }
 
-  section { padding: 100px 24px 40px; max-width: 880px; margin: 0 auto; scroll-margin-top: 52px; }
+  .repo-badge {
+    margin-left: auto; margin-right: 16px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    background: var(--gold-soft); border: 1px solid rgba(212,162,76,0.3); color: var(--gold);
+    padding: 6px 12px; border-radius: 4px; display: flex; align-items: center; gap: 6px;
+    font-weight: 500; transition: background 0.2s, transform 0.2s; white-space: nowrap;
+  }
+  .repo-badge:hover { background: var(--gold); color: var(--bg); transform: translateY(-1px); }
 
+  section { padding: 100px 24px 40px; max-width: 880px; margin: 0 auto; scroll-margin-top: 52px; }
   .hero { padding-top: 140px; }
+  
   .status-line {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 13px;
-    color: var(--green);
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(76,174,127,0.08);
-    border: 1px solid rgba(76,174,127,0.25);
-    padding: 6px 12px;
-    border-radius: 20px;
-    margin-bottom: 28px;
+    font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--green);
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(76,174,127,0.08); border: 1px solid rgba(76,174,127,0.25);
+    padding: 6px 12px; border-radius: 20px; margin-bottom: 28px;
   }
   .status-dot {
     width: 7px; height: 7px; border-radius: 50%; background: var(--green);
-    box-shadow: 0 0 0 0 rgba(76,174,127,0.6);
-    animation: pulse 2s infinite;
+    box-shadow: 0 0 0 0 rgba(76,174,127,0.6); animation: pulse 2s infinite;
   }
   @keyframes pulse {
     0% { box-shadow: 0 0 0 0 rgba(76,174,127,0.5); }
     70% { box-shadow: 0 0 0 6px rgba(76,174,127,0); }
     100% { box-shadow: 0 0 0 0 rgba(76,174,127,0); }
   }
-  h1 { font-size: clamp(38px, 6vw, 64px); font-weight: 700; letter-spacing: -0.02em; line-height: 1.08; }
-  h1 .accent { color: var(--gold); }
+  
+  h1 { font-size: clamp(38px, 6vw, 64px); font-weight: 700; letter-spacing: -0.02em; line-height: 1.08; word-break: break-word; }
   .role-line { margin-top: 18px; font-size: clamp(16px, 2.4vw, 20px); color: var(--ink-dim); font-family: 'JetBrains Mono', monospace; }
   .caret { display: inline-block; width: 9px; height: 1.1em; background: var(--gold); margin-left: 2px; vertical-align: text-bottom; animation: blink 1s steps(1) infinite; }
   @keyframes blink { 50% { opacity: 0; } }
-
-  .bio { margin-top: 28px; max-width: 620px; color: var(--ink-dim); font-size: 16px; }
+  .bio { margin-top: 28px; max-width: 620px; color: var(--ink-dim); font-size: 16px; word-break: break-word; }
 
   .sec-label { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--gold); margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
   .sec-label::before { content: ''; width: 18px; height: 1px; background: var(--gold); display: inline-block; }
@@ -101,8 +101,7 @@
 
   .now-card { background: var(--bg-raised); border: 1px solid var(--line); border-radius: 12px; padding: 26px 28px; position: relative; overflow: hidden; }
   .now-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--gold); }
-  .now-card p { color: var(--ink-dim); font-size: 15px; }
-  .now-card .now-title { font-size: 17px; font-weight: 600; margin-bottom: 8px; }
+  .now-card p { color: var(--ink-dim); font-size: 15px; word-break: break-word; }
 
   .chip-group { margin-bottom: 26px; }
   .chip-group .glabel { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--ink-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; }
@@ -113,8 +112,8 @@
   @media (max-width: 640px) { .proj-grid { grid-template-columns: 1fr; } }
   .proj-card { background: var(--bg-raised); border: 1px solid var(--line); border-radius: 12px; padding: 22px; transition: transform .18s, border-color .18s; display: block; }
   .proj-card:hover { transform: translateY(-3px); border-color: var(--gold); }
-  .proj-card .proj-name { font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: 15px; margin-bottom: 8px; color: var(--ink); }
-  .proj-card .proj-desc { color: var(--ink-dim); font-size: 13.5px; }
+  .proj-card .proj-name { font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: 15px; margin-bottom: 8px; color: var(--ink); text-overflow: ellipsis; overflow: hidden; }
+  .proj-card .proj-desc { color: var(--ink-dim); font-size: 13.5px; word-break: break-word; }
   .proj-card .proj-arrow { margin-top: 14px; font-size: 13px; color: var(--gold); font-family: 'JetBrains Mono', monospace; }
 
   #github-loading { color: var(--ink-dim); font-family: 'JetBrains Mono', monospace; font-size: 14px; }
@@ -194,30 +193,34 @@
 
 <div class="tabbar">
   <div class="dots"><span></span><span></span><span></span></div>
-  <a class="tab active" href="#about">about.md</a>
-  <a class="tab" href="#now">now.log</a>
-  <a class="tab" href="#work">projects.js</a>
-  <a class="tab" href="#progress" style="display: {{LEETCODE_DISPLAY}};">progress.json</a>
-  <a class="tab" href="#quiz">quiz.exe</a>
-  <a class="tab" href="#contact">contact.sh</a>
+  <div class="tabs-wrapper" id="tabs-container">
+    <a class="tab active" href="#about" data-sec="about">about.md</a>
+    <a class="tab" href="#now" data-sec="now">now.log</a>
+    <a class="tab" href="#work" data-sec="work">projects.js</a>
+    <a class="tab" id="tab-progress" href="#progress" data-sec="progress" style="display: {{LEETCODE_DISPLAY}};">progress.json</a>
+    <a class="tab" id="tab-quiz" href="#quiz" data-sec="quiz">quiz.exe</a>
+    <a class="tab" href="#contact" data-sec="contact">contact.sh</a>
+  </div>
+  <a class="repo-badge" href="https://github.com/tpbrdatta/terminal-portfolio-generator" target="_blank" rel="noopener">
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+    Generate Yours
+  </a>
 </div>
 
 <section class="hero" id="about">
-  <div class="status-line"><span class="status-dot"></span><span id="status-text">{{STATUS_TEXT}}</span></div>
-  <h1>{{NAME}}</h1>
-  <div class="role-line">{{TITLE}} <span id="typed-role"></span><span class="caret"></span></div>
-  <p class="bio">{{BIO}}</p>
+  <div class="status-line"><span class="status-dot"></span><span id="status-text"></span></div>
+  <h1 id="prof-name"></h1>
+  <div class="role-line"><span id="prof-title"></span> <span id="typed-role"></span><span class="caret"></span></div>
+  <p class="bio" id="prof-bio"></p>
 </section>
 
 <section id="now">
   <div class="sec-label">CURRENTLY</div>
   <h2>What I'm doing now</h2>
   <div class="now-card">
-    <p>{{CURRENT_ACTIVITY}}</p>
+    <p id="prof-activity"></p>
   </div>
-
   <div style="height:36px"></div>
-
   <div class="chip-group">
     <div class="glabel">Tech Stack & Tools</div>
     <div class="chips">
@@ -229,7 +232,7 @@
 <section id="work">
   <div class="sec-label">BUILD LOG</div>
   <h2>GitHub projects</h2>
-  <div id="github-loading">fetching repositories from github.com/{{GITHUB_USERNAME}} ...</div>
+  <div id="github-loading">fetching repositories...</div>
   <div class="proj-grid" id="proj-grid" style="display:none;"></div>
 </section>
 
@@ -240,7 +243,7 @@
     <div class="progress-card" id="leetcode-card">
       <div class="pc-head">
         <div class="pc-title">LeetCode</div>
-        <div class="pc-user">@{{LEETCODE_USERNAME}}</div>
+        <div class="pc-user" id="lc-user-label"></div>
       </div>
       <div class="pc-loading" id="leetcode-loading">fetching stats ...</div>
       <div id="leetcode-body" style="display:none;">
@@ -317,13 +320,13 @@
   <div class="sec-label">REACH ME</div>
   <h2>Let's connect</h2>
   <div class="contact-grid">
-    <a class="social-link" href="mailto:{{CONTACT_EMAIL}}" style="display: {{EMAIL_DISPLAY}};">
+    <a class="social-link" id="email-link" href="#" style="display: {{EMAIL_DISPLAY}};">
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2 5.5A2.5 2.5 0 0 1 4.5 3h15A2.5 2.5 0 0 1 22 5.5v13a2.5 2.5 0 0 1-2.5 2.5h-15A2.5 2.5 0 0 1 2 18.5v-13Zm2.2.3 7.8 6.1 7.8-6.1H4.2ZM20 7.4l-7.4 5.8a1 1 0 0 1-1.2 0L4 7.4v11.1c0 .28.22.5.5.5h15c.28 0 .5-.22.5-.5V7.4Z"/></svg>
-      {{CONTACT_EMAIL}}
+      <span id="email-label"></span>
     </a>
-    <a class="social-link" href="https://github.com/{{GITHUB_USERNAME}}" target="_blank" rel="noopener">
+    <a class="social-link" id="github-link" href="#" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55v-2.14c-3.2.7-3.87-1.36-3.87-1.36-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.04 1.77 2.72 1.26 3.38.96.1-.75.4-1.26.73-1.55-2.55-.29-5.23-1.27-5.23-5.66 0-1.25.45-2.27 1.18-3.07-.12-.29-.51-1.46.11-3.04 0 0 .96-.31 3.15 1.17a10.9 10.9 0 0 1 5.74 0c2.19-1.48 3.15-1.17 3.15-1.17.62 1.58.23 2.75.11 3.04.74.8 1.18 1.82 1.18 3.07 0 4.4-2.69 5.37-5.25 5.65.41.36.78 1.06.78 2.15v3.19c0 .3.21.66.79.55A10.52 10.52 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/></svg>
-      github.com/{{GITHUB_USERNAME}}
+      <span id="github-label"></span>
     </a>
   </div>
 </section>
@@ -333,177 +336,262 @@
 </footer>
 
 <script>
-  const roles = ["→ user profile", "→ verified stack active", "→ secure configuration"];
-  const el = document.getElementById('typed-role');
-  let ri = 0, ci = 0, deleting = false;
+  (function() {
+    // SECURE INPUT DATA ENCAPSULATION (Mitigates raw DOM XSS vulnerabilities)
+    const profile = {
+      name: `{{NAME}}`,
+      title: `{{TITLE}}`,
+      status: `{{STATUS_TEXT}}`,
+      bio: `{{BIO}}`,
+      activity: `{{CURRENT_ACTIVITY}}`,
+      github: `{{GITHUB_USERNAME}}`,
+      leetcode: `{{LEETCODE_USERNAME}}`,
+      email: `{{CONTACT_EMAIL}}`
+    };
 
-  function typeLoop(){
-    const current = roles[ri];
-    if(!deleting){
-      ci++;
-      el.textContent = current.slice(0, ci);
-      if(ci === current.length){ deleting = true; setTimeout(typeLoop, 1400); return; }
+    // Secure Text Bindings
+    document.getElementById('prof-name').textContent = profile.name || 'Anonymous Developer';
+    document.getElementById('prof-title').textContent = profile.title || 'Engineer';
+    document.getElementById('status-text').textContent = profile.status || 'Active';
+    document.getElementById('prof-bio').textContent = profile.bio || '';
+    document.getElementById('prof-activity').textContent = profile.activity || 'Building amazing software.';
+    
+    if (profile.github) {
+      document.getElementById('github-link').href = `https://github.com/${encodeURIComponent(profile.github)}`;
+      document.getElementById('github-label').textContent = `github.com/${profile.github}`;
+      document.getElementById('github-loading').textContent = `fetching repositories from github.com/${profile.github} ...`;
     } else {
-      ci--;
-      el.textContent = current.slice(0, ci);
-      if(ci === 0){ deleting = false; ri = (ri+1) % roles.length; }
+      document.getElementById('github-link').style.display = 'none';
+      document.getElementById('github-loading').textContent = 'No GitHub profile connected.';
     }
-    setTimeout(typeLoop, deleting ? 35 : 55);
-  }
-  typeLoop();
+    
+    if (profile.email && profile.email.indexOf('{{') === -1) {
+      document.getElementById('email-link').href = `mailto:${encodeURIComponent(profile.email)}`;
+      document.getElementById('email-label').textContent = profile.email;
+    } else {
+      document.getElementById('email-link').style.display = 'none';
+    }
 
-  const tabs = document.querySelectorAll('.tab');
-  const sectionIds = ['about','now','work','quiz','contact'];
-  if("{{LEETCODE_USERNAME}}") sectionIds.push('progress');
-  const sections = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
-  
-  window.addEventListener('scroll', () => {
-    let idx = 0;
-    sections.forEach((s,i) => { if(window.scrollY >= s.offsetTop - 80) idx = i; });
-    tabs.forEach(t => t.classList.remove('active'));
-    if(tabs[idx]) tabs[idx].classList.add('active');
-  });
+    // Role Typing Engine
+    const roles = ["→ user profile", "→ verified stack active", "→ secure configuration"];
+    const el = document.getElementById('typed-role');
+    let ri = 0, ci = 0, deleting = false;
 
-  fetch('https://api.github.com/users/{{GITHUB_USERNAME}}/repos?sort=updated&per_page=6')
-    .then(r => r.ok ? r.json() : Promise.reject())
-    .then(repos => {
-      const grid = document.getElementById('proj-grid');
-      const loading = document.getElementById('github-loading');
-      if(!Array.isArray(repos) || repos.length === 0){
-        loading.textContent = 'no public repositories found yet.';
+    function typeLoop(){
+      const current = roles[ri];
+      if(!deleting){
+        ci++;
+        el.textContent = current.slice(0, ci);
+        if(ci === current.length){ deleting = true; setTimeout(typeLoop, 1400); return; }
+      } else {
+        ci--;
+        el.textContent = current.slice(0, ci);
+        if(ci === 0){ deleting = false; ri = (ri+1) % roles.length; }
+      }
+      setTimeout(typeLoop, deleting ? 35 : 55);
+    }
+    typeLoop();
+
+    // High Performance Intersection Observer navigation highlighter
+    const tabs = document.querySelectorAll('.tab');
+    const observerOptions = { root: null, rootMargin: '-40% 0px -50% 0px', threshold: 0 };
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          tabs.forEach(t => {
+            if (t.getAttribute('data-sec') === id) {
+              t.classList.add('active');
+            } else {
+              t.classList.remove('active');
+            }
+          });
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('section').forEach(sec => observer.observe(sec));
+
+    // Secure Async GitHub Repository Engine
+    if (profile.github && profile.github.indexOf('{{') === -1) {
+      fetch(`https://api.github.com/users/${encodeURIComponent(profile.github)}/repos?sort=updated&per_page=6`)
+        .then(r => r.ok ? r.json() : Promise.reject())
+        .then(repos => {
+          const grid = document.getElementById('proj-grid');
+          const loading = document.getElementById('github-loading');
+          if(!Array.isArray(repos) || repos.length === 0){
+            loading.textContent = 'no public repositories found yet.';
+            return;
+          }
+          loading.style.display = 'none';
+          grid.style.display = 'grid';
+          repos.filter(r => !r.fork).slice(0,6).forEach(repo => {
+            const a = document.createElement('a');
+            a.className = 'proj-card';
+            a.href = repo.html_url;
+            a.target = '_blank';
+            a.rel = 'noopener';
+            
+            const nameDiv = document.createElement('div'); nameDiv.className = 'proj-name'; nameDiv.textContent = repo.name;
+            const descDiv = document.createElement('div'); descDiv.className = 'proj-desc'; descDiv.textContent = repo.description || 'No description provided.';
+            const arrDiv = document.createElement('div'); arrDiv.className = 'proj-arrow'; arrDiv.textContent = `${repo.language ? repo.language + ' · ' : ''}view repo →`;
+            
+            a.appendChild(nameDiv); a.appendChild(descDiv); a.appendChild(arrDiv);
+            grid.appendChild(a);
+          });
+        }).catch(() => {
+          document.getElementById('github-loading').textContent = 'failed to securely index repositories.';
+        });
+    }
+
+    // LeetCode Secure Pipeline Fetcher
+    if(profile.leetcode && "{{LEETCODE_DISPLAY}}" !== "none" && profile.leetcode.indexOf('{{') === -1) {
+      document.getElementById('lc-user-label').textContent = `@${profile.leetcode}`;
+      fetch(`https://leetcode-stats-inky.vercel.app/?username=${encodeURIComponent(profile.leetcode)}`)
+        .then(r => r.ok ? r.json() : Promise.reject())
+        .then(data => {
+          document.getElementById('leetcode-loading').style.display = 'none';
+          document.getElementById('leetcode-body').style.display = 'block';
+          const pct = data.totalQuestions ? Math.round((data.totalSolved / data.totalQuestions) * 100) : 0;
+          document.getElementById('lc-total').textContent = `${data.totalSolved} / ${data.totalQuestions}`;
+          document.getElementById('lc-bar').style.width = pct + '%';
+          document.getElementById('lc-easy').textContent = `Easy ${data.easySolved}`;
+          document.getElementById('lc-med').textContent = `Medium ${data.mediumSolved}`;
+          document.getElementById('lc-hard').textContent = `Hard ${data.hardSolved}`;
+        })
+        .catch(() => {
+          document.getElementById('leetcode-loading').textContent = 'could not pull secure analytical metrics.';
+        });
+    }
+
+    // Isolated Sanitized Quiz Core Engine
+    let QUIZ_DATA = [];
+    try {
+      const rawQuiz = `{{QUIZ_DATA_JSON}}`;
+      if (rawQuiz && rawQuiz.indexOf('{{') === -1) {
+         const parsedData = JSON.parse(rawQuiz);
+         if(Array.isArray(parsedData)) QUIZ_DATA = parsedData;
+      }
+    } catch(e) {
+      QUIZ_DATA = [];
+    }
+    
+    let round = []; let idx = 0; let score = 0;
+
+    function shuffle(arr){
+      const a = [...arr];
+      for(let i=a.length-1;i>0;i--){
+        const j = Math.floor(Math.random()*(i+1));
+        [a[i],a[j]]=[a[j],a[i]];
+      }
+      return a;
+    }
+
+    function buildRound(){
+      if(!QUIZ_DATA.length) return;
+      round = QUIZ_DATA.map(item => {
+        const opts = shuffle([item.correct, ...item.decoys]);
+        return { q: item.q, correct: item.correct, opts };
+      });
+      idx = 0; score = 0;
+    }
+
+    function renderQuestion(){
+      if(!round.length) return;
+      const item = round[idx];
+      document.getElementById('progressLabel').textContent = `test ${idx+1} / ${round.length}`;
+      document.getElementById('scoreLabel').textContent = `passed: ${score}`;
+      document.getElementById('progressFill').style.width = `${(idx/round.length)*100}%`;
+      document.getElementById('qLine').textContent = `// question ${idx+1}`;
+      document.getElementById('qText').textContent = item.q;
+      document.getElementById('feedback').textContent = '';
+      document.getElementById('nextBtn').style.display = 'none';
+
+      const optsWrap = document.getElementById('options');
+      optsWrap.innerHTML = '';
+      item.opts.forEach((opt, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'opt';
+        
+        const tagSpan = document.createElement('span'); tagSpan.className = 'tag'; tagSpan.textContent = String.fromCharCode(65+i) + ' ';
+        const txtNode = document.createTextNode(opt);
+        
+        btn.appendChild(tagSpan); btn.appendChild(txtNode);
+        btn.onclick = () => selectAnswer(btn, opt, item.correct);
+        optsWrap.appendChild(btn);
+      });
+    }
+
+    function selectAnswer(btn, chosen, correct){
+      const buttons = document.querySelectorAll('.opt');
+      buttons.forEach(b => b.disabled = true);
+      if(chosen === correct){
+        btn.classList.add('correct'); score++;
+        document.getElementById('feedback').textContent = '✓ test passed';
+      } else {
+        btn.classList.add('wrong');
+        document.getElementById('feedback').textContent = `✗ test failed`;
+        buttons.forEach(b => {
+          if(b.textContent.slice(2).trim() === correct.trim()) b.classList.add('correct');
+        });
+      }
+      document.getElementById('scoreLabel').textContent = `passed: ${score}`;
+      document.getElementById('nextBtn').style.display = 'inline-block';
+    }
+
+    document.getElementById('nextBtn').onclick = () => {
+      idx++; if(idx < round.length) { renderQuestion(); } else { showResults(); }
+    };
+
+    function showResults(){
+      document.getElementById('quiz-module').style.display = 'none';
+      document.getElementById('results').style.display = 'block';
+      const pct = Math.round((score/round.length)*100);
+      
+      const logRes = document.getElementById('logResult');
+      if(score === round.length) {
+        logRes.className = "log-line ok"; logRes.textContent = "✓ zero structural execution failures";
+      } else {
+        logRes.className = "log-line k"; logRes.textContent = "! process anomalies detected during testing";
+      }
+      
+      document.getElementById('finalScore').textContent = `${score}/${round.length}`;
+      document.getElementById('verdict').textContent = pct === 100 ? "// certified profile deployment expert" : "// compilation completed with errors";
+    }
+
+    document.getElementById('retryBtn').onclick = () => {
+      document.getElementById('results').style.display = 'none';
+      document.getElementById('cover').style.display = 'block';
+    };
+
+    const glitchChars = "!<>-_\\/[]{}—=+*^?#________";
+    function scramble(target, finalText, duration){
+      return new Promise(resolve => {
+        const start = Date.now(); const el = document.getElementById(target);
+        const timer = setInterval(() => {
+          const progress = (Date.now()-start)/duration;
+          if(progress >= 1){ el.textContent = finalText; clearInterval(timer); resolve(); return; }
+          let out = ''; for(let i=0;i<finalText.length;i++){ if(i/finalText.length < progress) out += finalText[i]; else out += glitchChars[Math.floor(Math.random()*glitchChars.length)]; }
+          el.textContent = out;
+        }, 40);
+      });
+    }
+
+    document.getElementById('startBtn').onclick = async () => {
+      if(!QUIZ_DATA.length) {
+        alert('No interactive quiz config was parsed. Add quiz keys to your configuration to unlock quiz.exe!');
         return;
       }
-      loading.style.display = 'none';
-      grid.style.display = 'grid';
-      repos.filter(r => !r.fork).slice(0,6).forEach(repo => {
-        const a = document.createElement('a');
-        a.className = 'proj-card';
-        a.href = repo.html_url;
-        a.target = '_blank';
-        a.rel = 'noopener';
-        a.innerHTML = `
-          <div class="proj-name">${repo.name}</div>
-          <div class="proj-desc">${repo.description ? repo.description : 'No description provided.'}</div>
-          <div class="proj-arrow">${repo.language ? repo.language + ' · ' : ''}view repo →</div>
-        `;
-        grid.appendChild(a);
-      });
-    });
-
-  if("{{LEETCODE_USERNAME}}") {
-    fetch('https://leetcode-stats-inky.vercel.app/?username={{LEETCODE_USERNAME}}')
-      .then(r => r.ok ? r.json() : Promise.reject())
-      .then(data => {
-        document.getElementById('leetcode-loading').style.display = 'none';
-        document.getElementById('leetcode-body').style.display = 'block';
-        const pct = data.totalQuestions ? Math.round((data.totalSolved / data.totalQuestions) * 100) : 0;
-        document.getElementById('lc-total').textContent = `${data.totalSolved} / ${data.totalQuestions}`;
-        document.getElementById('lc-bar').style.width = pct + '%';
-        document.getElementById('lc-easy').textContent = `Easy ${data.easySolved}`;
-        document.getElementById('lc-med').textContent = `Medium ${data.mediumSolved}`;
-        document.getElementById('lc-hard').textContent = `Hard ${data.hardSolved}`;
-      })
-      .catch(() => {
-        document.getElementById('leetcode-loading').textContent = 'could not load stats.';
-      });
-  }
-
-  const QUIZ_DATA = {{QUIZ_DATA_JSON}};
-  let round = []; let idx = 0; let score = 0;
-
-  function shuffle(arr){
-    const a = [...arr];
-    for(let i=a.length-1;i>0;i--){
-      const j = Math.floor(Math.random()*(i+1));
-      [a[i],a[j]]=[a[j],a[i]];
-    }
-    return a;
-  }
-
-  function buildRound(){
-    round = QUIZ_DATA.map(item => {
-      const opts = shuffle([item.correct, ...item.decoys]);
-      return { q: item.q, correct: item.correct, opts };
-    });
-    idx = 0; score = 0;
-  }
-
-  function renderQuestion(){
-    const item = round[idx];
-    document.getElementById('progressLabel').textContent = `test ${idx+1} / ${round.length}`;
-    document.getElementById('scoreLabel').textContent = `passed: ${score}`;
-    document.getElementById('progressFill').style.width = `${(idx/round.length)*100}%`;
-    document.getElementById('qLine').textContent = `// question ${idx+1}`;
-    document.getElementById('qText').textContent = item.q;
-    document.getElementById('feedback').textContent = '';
-    document.getElementById('nextBtn').style.display = 'none';
-
-    const optsWrap = document.getElementById('options');
-    optsWrap.innerHTML = '';
-    item.opts.forEach((opt, i) => {
-      const btn = document.createElement('button');
-      btn.className = 'opt';
-      btn.innerHTML = `<span class="tag">${String.fromCharCode(65+i)}</span> ${opt}`;
-      btn.onclick = () => selectAnswer(btn, opt, item.correct);
-      optsWrap.appendChild(btn);
-    });
-  }
-
-  function selectAnswer(btn, chosen, correct){
-    const buttons = document.querySelectorAll('.opt');
-    buttons.forEach(b => b.disabled = true);
-    if(chosen === correct){
-      btn.classList.add('correct'); score++;
-      document.getElementById('feedback').textContent = '✓ test passed';
-    } else {
-      btn.classList.add('wrong');
-      document.getElementById('feedback').textContent = `✗ test failed — expected "${correct}"`;
-      buttons.forEach(b => { if(b.textContent.trim().substring(2) === correct) b.classList.add('correct'); });
-    }
-    document.getElementById('scoreLabel').textContent = `passed: ${score}`;
-    document.getElementById('nextBtn').style.display = 'inline-block';
-  }
-
-  document.getElementById('nextBtn').onclick = () => {
-    idx++; if(idx < round.length) { renderQuestion(); } else { showResults(); }
-  };
-
-  function showResults(){
-    document.getElementById('quiz-module').style.display = 'none';
-    document.getElementById('results').style.display = 'block';
-    const pct = Math.round((score/round.length)*100);
-    document.getElementById('logResult').innerHTML = score === round.length ? '<span class="ok">✓</span> zero failures' : `<span class="k">!</span> failures detected`;
-    document.getElementById('finalScore').textContent = `${score}/${round.length}`;
-    document.getElementById('verdict').textContent = pct === 100 ? "// certified profile expert" : "// parsing finished";
-  }
-
-  document.getElementById('retryBtn').onclick = () => {
-    document.getElementById('results').style.display = 'none';
-    document.getElementById('cover').style.display = 'block';
-  };
-
-  const glitchChars = "!<>-_\\/[]{}—=+*^?#________";
-  function scramble(target, finalText, duration){
-    return new Promise(resolve => {
-      const start = Date.now(); const el = document.getElementById(target);
-      const timer = setInterval(() => {
-        const progress = (Date.now()-start)/duration;
-        if(progress >= 1){ el.textContent = finalText; clearInterval(timer); resolve(); return; }
-        let out = ''; for(let i=0;i<finalText.length;i++){ if(i/finalText.length < progress) out += finalText[i]; else out += glitchChars[Math.floor(Math.random()*glitchChars.length)]; }
-        el.textContent = out;
-      }, 40);
-    });
-  }
-
-  document.getElementById('startBtn').onclick = async () => {
-    document.getElementById('cover').style.display = 'none';
-    const layer = document.getElementById('glitch-layer'); layer.classList.add('active');
-    await scramble('glitchText', 'loading setup_data.json', 400);
-    layer.classList.remove('active');
-    buildRound();
-    document.getElementById('quiz-module').style.display = 'block';
-    renderQuestion();
-  };
+      document.getElementById('cover').style.display = 'none';
+      const layer = document.getElementById('glitch-layer'); layer.classList.add('active');
+      await scramble('glitchText', 'initializing sandbox_context.env', 400);
+      layer.classList.remove('active');
+      buildRound();
+      document.getElementById('quiz-module').style.display = 'block';
+      renderQuestion();
+    };
+  })();
 </script>
 </body>
 </html>

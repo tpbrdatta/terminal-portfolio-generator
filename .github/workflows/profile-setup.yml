@@ -1,0 +1,36 @@
+name: Profile Setup Runner
+
+on:
+  issues:
+    types: [labeled]
+
+permissions:
+  contents: write
+  issues: read
+
+jobs:
+  build-and-deploy:
+    if: github.event.label.name == 'profile-setup'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-size: 18
+
+      - name: Run Profile Parser
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: node scripts/parse-issue.js
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .
+          publish_branch: gh-pages
+          keep_files: false
+          destination_dir: .
