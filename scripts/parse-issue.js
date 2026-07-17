@@ -11,11 +11,11 @@ function parseMarkdown(body) {
   };
 
   const matches = {
-    name: body.match(/### Name\s+([\s\S]*?)(?=\n###|$)/),
-    title: body.match(/### Title\s+([\s\S]*?)(?=\n###|$)/),
+    name: body.match(/### Full Name\s+([\s\S]*?)(?=\n###|$)/),
+    title: body.match(/### Job Title \/ Core Focus\s+([\s\S]*?)(?=\n###|$)/),
     accent: body.match(/### Accent Color\s+([\s\S]*?)(?=\n###|$)/),
     status: body.match(/### Status Text\s+([\s\S]*?)(?=\n###|$)/),
-    bio: body.match(/### Bio\s+([\s\S]*?)(?=\n###|$)/),
+    bio: body.match(/### Biography\s+([\s\S]*?)(?=\n###|$)/),
     activity: body.match(/### Current Activity\s+([\s\S]*?)(?=\n###|$)/),
     tech: body.match(/### Tech Stack\s+([\s\S]*?)(?=\n###|$)/),
     github: body.match(/### GitHub Username\s+([\s\S]*?)(?=\n###|$)/),
@@ -51,7 +51,7 @@ function parseMarkdown(body) {
     }
   }
 
-  const socialTargets = ['Contact Email', 'LinkedIn', 'Twitter', 'X', 'Discord', 'Website'];
+  const socialTargets = ['Contact Email', 'LinkedIn', 'X', 'Website'];
   socialTargets.forEach(target => {
     const regex = new RegExp(`### ${target}\\s+([\\s\\S]*?)(?=\\n###|$)`);
     const found = body.match(regex);
@@ -110,6 +110,8 @@ function generateHTML() {
     </div>`;
   });
 
+  const emailValue = values.socials['Contact Email'] || '';
+
   html = html.replace(/\{\{NAME\}\}/g, values.name)
              .replace(/\{\{TITLE\}\}/g, values.title)
              .replace(/\{\{ACCENT_COLOR\}\}/g, values.accent)
@@ -117,7 +119,10 @@ function generateHTML() {
              .replace(/\{\{BIO\}\}/g, values.bio)
              .replace(/\{\{CURRENT_ACTIVITY\}\}/g, values.activity)
              .replace(/\{\{TECH_STACK_CHIPS\}\}/g, values.tech)
+             .replace(/\{\{GITHUB_USERNAME\}\}/g, values.github)
              .replace(/\{\{LEETCODE_USERNAME\}\}/g, values.leetcode)
+             .replace(/\{\{CONTACT_EMAIL\}\}/g, emailValue)
+             .replace(/\{\{EMAIL_DISPLAY\}\}/g, emailValue ? 'flex' : 'none')
              .replace(/\{\{QUIZ_DATA_JSON\}\}/g, values.quiz)
              .replace(/\{\{LEETCODE_DISPLAY\}\}/g, values.leetcode ? 'block' : 'none')
              .replace(/\{\{SOCIAL_LINKS_BLOCK\}\}/g, linksHTML)
