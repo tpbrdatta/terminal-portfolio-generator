@@ -13,7 +13,7 @@
     --ink: #E9EDF5;
     --ink-dim: #8B96AC;
     --line: #223051;
-    --gold: {{ACCENT_COLOR}}; 
+    --gold: #4CAE7F; 
     --gold-soft: rgba(212,162,76,0.12);
     --green: #4CAE7F;
     --keyword: #E5645C;
@@ -197,7 +197,7 @@
     <a class="tab active" href="#about" data-sec="about">about.md</a>
     <a class="tab" href="#now" data-sec="now">now.log</a>
     <a class="tab" href="#work" data-sec="work">projects.js</a>
-    <a class="tab" id="tab-progress" href="#progress" data-sec="progress" style="display: {{LEETCODE_DISPLAY}};">progress.json</a>
+    <a class="tab" id="tab-progress" href="#progress" data-sec="progress" style="display: block;">progress.json</a>
     <a class="tab" id="tab-quiz" href="#quiz" data-sec="quiz">quiz.exe</a>
     <a class="tab" href="#contact" data-sec="contact">contact.sh</a>
   </div>
@@ -224,7 +224,12 @@
   <div class="chip-group">
     <div class="glabel">Tech Stack & Tools</div>
     <div class="chips">
-      {{TECH_STACK_CHIPS}}
+      <span class="chip">& Tools (Comma separated)
+
+C</span>
+<span class="chip">SQL</span>
+<span class="chip">Python</span>
+<span class="chip">Java</span>
     </div>
   </div>
 </section>
@@ -236,7 +241,7 @@
   <div class="proj-grid" id="proj-grid" style="display:none;"></div>
 </section>
 
-<section id="progress" style="display: {{LEETCODE_DISPLAY}};">
+<section id="progress" style="display: block;">
   <div class="sec-label">GRINDING</div>
   <h2>Progress</h2>
   <div class="progress-grid">
@@ -320,7 +325,7 @@
   <div class="sec-label">REACH ME</div>
   <h2>Let's connect</h2>
   <div class="contact-grid">
-    <a class="social-link" id="email-link" href="#" style="display: {{EMAIL_DISPLAY}};">
+    <a class="social-link" id="email-link" href="#" style="display: flex;">
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2 5.5A2.5 2.5 0 0 1 4.5 3h15A2.5 2.5 0 0 1 22 5.5v13a2.5 2.5 0 0 1-2.5 2.5h-15A2.5 2.5 0 0 1 2 18.5v-13Zm2.2.3 7.8 6.1 7.8-6.1H4.2ZM20 7.4l-7.4 5.8a1 1 0 0 1-1.2 0L4 7.4v11.1c0 .28.22.5.5.5h15c.28 0 .5-.22.5-.5V7.4Z"/></svg>
       <span id="email-label"></span>
     </a>
@@ -339,14 +344,18 @@
   (function() {
     // SECURE INPUT DATA ENCAPSULATION (Mitigates raw DOM XSS vulnerabilities)
     const profile = {
-      name: `{{NAME}}`,
-      title: `{{TITLE}}`,
-      status: `{{STATUS_TEXT}}`,
-      bio: `{{BIO}}`,
-      activity: `{{CURRENT_ACTIVITY}}`,
-      github: `{{GITHUB_USERNAME}}`,
-      leetcode: `{{LEETCODE_USERNAME}}`,
-      email: `{{CONTACT_EMAIL}}`
+      name: ``,
+      title: ``,
+      status: `🟢 Active`,
+      bio: ``,
+      activity: ``,
+      github: `tpbrdatta`,
+      leetcode: `(Optional)
+
+tpbrdatta`,
+      email: `Address (Optional)
+
+tpbrdatta@gmail.com`
     };
 
     // Secure Text Bindings
@@ -446,7 +455,7 @@
     }
 
     // LeetCode Secure Pipeline Fetcher
-    if(profile.leetcode && "{{LEETCODE_DISPLAY}}" !== "none" && profile.leetcode.indexOf('{{') === -1) {
+    if(profile.leetcode && "block" !== "none" && profile.leetcode.indexOf('{{') === -1) {
       document.getElementById('lc-user-label').textContent = `@${profile.leetcode}`;
       fetch(`https://leetcode-stats-inky.vercel.app/?username=${encodeURIComponent(profile.leetcode)}`)
         .then(r => r.ok ? r.json() : Promise.reject())
@@ -468,7 +477,7 @@
     // Isolated Sanitized Quiz Core Engine
     let QUIZ_DATA = [];
     try {
-      const rawQuiz = `{{QUIZ_DATA_JSON}}`;
+      const rawQuiz = `[]`;
       if (rawQuiz && rawQuiz.indexOf('{{') === -1) {
          const parsedData = JSON.parse(rawQuiz);
          if(Array.isArray(parsedData)) QUIZ_DATA = parsedData;

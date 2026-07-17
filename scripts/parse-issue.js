@@ -1,77 +1,80 @@
 const fs = require('fs');
 const path = require('path');
 
-// Extract environment variable from GitHub Action
 const issueBody = process.env.ISSUE_BODY || '';
 
 function parseMarkdown(body) {
   const data = {
-    name: 'Anonymous Hacker',
-    title: 'Software Engineer',
-    bio: 'No bio provided.',
-    skills: [],
-    projects: []
+    name: '', title: '', accent: '#4CAE7F', status: '🟢 Active',
+    bio: '', activity: '', tech: '', github: '', leetcode: '', email: '', quiz: '[]'
   };
 
-  // Extract simple fields using Regex
-  const nameMatch = body.match(/### Name\s+([\s\S]*?)(?=\n###|$)/);
-  const titleMatch = body.match(/### Title\s+([\s\S]*?)(?=\n###|$)/);
-  const bioMatch = body.match(/### Bio\s+([\s\S]*?)(?=\n###|$)/);
-  const skillsMatch = body.match(/### Skills\s+([\s\S]*?)(?=\n###|$)/);
-  const projectsMatch = body.match(/### Projects\s+([\s\S]*?)(?=\n###|$)/);
+  const matches = {
+    name: body.match(/### Name\s+([\s\S]*?)(?=\n###|$)/),
+    title: body.match(/### Title\s+([\s\S]*?)(?=\n###|$)/),
+    accent: body.match(/### Accent Color\s+([\s\S]*?)(?=\n###|$)/),
+    status: body.match(/### Status Text\s+([\s\S]*?)(?=\n###|$)/),
+    bio: body.match(/### Bio\s+([\s\S]*?)(?=\n###|$)/),
+    activity: body.match(/### Current Activity\s+([\s\S]*?)(?=\n###|$)/),
+    tech: body.match(/### Tech Stack\s+([\s\S]*?)(?=\n###|$)/),
+    github: body.match(/### GitHub Username\s+([\s\S]*?)(?=\n###|$)/),
+    leetcode: body.match(/### LeetCode Username\s+([\s\S]*?)(?=\n###|$)/),
+    email: body.match(/### Contact Email\s+([\s\S]*?)(?=\n###|$)/),
+    quiz: body.match(/### Quiz Data\s+([\s\S]*?)(?=\n###|$)/)
+  };
 
-  if (nameMatch) data.name = nameMatch[1].trim();
-  if (titleMatch) data.title = titleMatch[1].trim();
-  if (bioMatch) data.bio = bioMatch[1].trim();
-
-  if (skillsMatch) {
-    data.skills = skillsMatch[1]
-      .split(',')
-      .map(s => s.trim())
-      .filter(s => s.length > 0);
+  if (matches.name) data.name = matches.name[1].trim();
+  if (matches.title) data.title = matches.title[1].trim();
+  if (matches.accent) data.accent = matches.accent[1].trim();
+  if (matches.status) data.status = matches.status[1].trim();
+  if (matches.bio) data.bio = matches.bio[1].trim();
+  if (matches.activity) data.activity = matches.activity[1].trim();
+  if (matches.github) data.github = matches.github[1].trim();
+  if (matches.leetcode) data.leetcode = matches.leetcode[1].trim();
+  if (matches.email) data.email = matches.email[1].trim();
+  
+  if (matches.tech) {
+    const chips = matches.tech[1].split(',').map(t => `<span class="chip">${t.trim()}</span>`).join('\n');
+    data.tech = chips;
   }
-
-  if (projectsMatch) {
-    // Parse markdown lines as projects: "- [Name](URL) - Description"
-    const lines = projectsMatch[1].split('\n');
-    lines.forEach(line => {
-      const match = line.match(/-\s*\[(.*?)\]\((.*?)\)\s*-\s*(.*)/);
-      if (match) {
-        data.projects.push({
-          name: match[1].trim(),
-          url: match[2].trim(),
-          description: match[3].trim()
-        });
-      }
-    });
+  
+  if (matches.quiz) {
+    try {
+      // Validate that it is safe, real JSON data
+      const cleanJson = matches.quiz[1].trim();
+      JSON.parse(cleanJson); 
+      data.quiz = cleanJson;
+    } catch(e) {
+      data.quiz = '[]';
+    }
   }
 
   return data;
 }
 
 function generateHTML() {
-  const parsedData = parseMarkdown(issueBody);
+  const values = parseMarkdown(issueBody);
   const templatePath = path.join(__dirname, '../template.html');
   const outputPath = path.join(__dirname, '../index.html');
 
-  if (!fs.existsSync(templatePath)) {
-    console.error("Error: template.html not found!");
-    process.exit(1);
-  }
+  let html = fs.readFileSync(templatePath, 'utf8');
 
-  let htmlContent = fs.readFileSync(templatePath, 'utf8');
+  // Multi-target dynamic replacement engine matching your exact template definitions
+  html = html.replace(/\{\{NAME\}\}/g, values.name)
+             .replace(/\{\{TITLE\}\}/g, values.title)
+             .replace(/\{\{ACCENT_COLOR\}\}/g, values.accent)
+             .replace(/\{\{STATUS_TEXT\}\}/g, values.status)
+             .replace(/\{\{BIO\}\}/g, values.bio)
+             .replace(/\{\{CURRENT_ACTIVITY\}\}/g, values.activity)
+             .replace(/\{\{TECH_STACK_CHIPS\}\}/g, values.tech)
+             .replace(/\{\{GITHUB_USERNAME\}\}/g, values.github)
+             .replace(/\{\{LEETCODE_USERNAME\}\}/g, values.leetcode)
+             .replace(/\{\{CONTACT_EMAIL\}\}/g, values.email)
+             .replace(/\{\{QUIZ_DATA_JSON\}\}/g, values.quiz)
+             .replace(/\{\{LEETCODE_DISPLAY\}\}/g, values.leetcode ? 'block' : 'none')
+             .replace(/\{\{EMAIL_DISPLAY\}\}/g, values.email ? 'flex' : 'none');
 
-  // Deep-Defense XSS: Injecting raw data as safe JSON into a <script> tag.
-  // The front-end will render this strictly using .textContent bindings.
-  const safeJsonPayload = JSON.stringify(parsedData).replace(/</g, '\\u003c');
-  
-  htmlContent = htmlContent.replace(
-    '<script id="profile-data" type="application/json"></script>',
-    `<script id="profile-data" type="application/json">${safeJsonPayload}</script>`
-  );
-
-  fs.writeFileSync(outputPath, htmlContent, 'utf8');
-  console.log("Successfully generated index.html!");
+  fs.writeFileSync(outputPath, html, 'utf8');
 }
 
 generateHTML();
