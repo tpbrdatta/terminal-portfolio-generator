@@ -3,11 +3,34 @@ const path = require('path');
 
 const issueBody = process.env.ISSUE_BODY || '';
 
+// Known platforms get a proper profile URL built from just a username.
+// Anything else (or a value that's already a full URL) is used as-is.
+function buildSocialUrl(platform, value) {
+  const v = value.trim();
+  if (/^https?:\/\//i.test(v)) return v;
+
+  const p = platform.trim().toLowerCase();
+  if (p.includes('linkedin')) return `https://linkedin.com/in/${v}`;
+  if (p === 'x' || p.includes('twitter')) return `https://x.com/${v}`;
+  if (p.includes('instagram')) return `https://instagram.com/${v}`;
+  if (p.includes('facebook')) return `https://facebook.com/${v}`;
+  if (p.includes('reddit')) return `https://reddit.com/u/${v}`;
+  if (p.includes('youtube')) return `https://youtube.com/@${v}`;
+  if (p.includes('discord')) return `https://discord.com/users/${v}`;
+  if (p.includes('telegram')) return `https://t.me/${v}`;
+  // Website or anything unrecognized: trust the value as typed.
+  return v;
+}
+
+// Generic "link" glyph used for every dynamic social platform, so we don't
+// have to guess at (and risk misrepresenting) individual brand marks.
+const SOCIAL_ICON = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>';
+
 function parseMarkdown(body) {
   const data = {
     name: '', title: '', accent: '#4CAE7F', status: '🟢 Active',
     bio: '', activity: '', tech: '', github: '', leetcode: '', quiz: '[]',
-    socials: {}, projects: []
+    socials: []
   };
 
   const matches = {
@@ -20,14 +43,15 @@ function parseMarkdown(body) {
     tech: body.match(/### Tech Stack\s+([\s\S]*?)(?=\n###|$)/),
     github: body.match(/### GitHub Username\s+([\s\S]*?)(?=\n###|$)/),
     leetcode: body.match(/### LeetCode Username\s+([\s\S]*?)(?=\n###|$)/),
-    projects: body.match(/### Featured GitHub Projects\s+([\s\S]*?)(?=\n###|$)/),
+    socialLinks: body.match(/### Social Links\s+([\s\S]*?)(?=\n###|$)/),
+    contactEmail: body.match(/### Contact Email\s+([\s\S]*?)(?=\n###|$)/),
     quiz: body.match(/### Quiz Data\s+([\s\S]*?)(?=\n###|$)/)
   };
 
   if (matches.name) data.name = matches.name[1].trim();
   if (matches.title) data.title = matches.title[1].trim();
 
-  // FIX: the dropdown value looks like "Matrix Green (#4CAE7F)" — pull just the hex.
+  // The dropdown value looks like "Matrix Green (#4CAE7F)" — pull just the hex.
   if (matches.accent) {
     const raw = matches.accent[1].trim();
     const hexMatch = raw.match(/#([A-Fa-f0-9]{6})/);
@@ -44,12 +68,15 @@ function parseMarkdown(body) {
     data.tech = matches.tech[1].split(',').map(t => `<span class="chip">${t.trim()}</span>`).join('\n');
   }
 
-  if (matches.projects && matches.projects[1].trim()) {
-    data.projects = matches.projects[1].split(',').map(p => p.trim()).filter(p => p.length > 0);
+  if (matches.contactEmail) {
+    const val = matches.contactEmail[1].trim();
+    data.email = (val && val !== '_No response_') ? val : '';
+  } else {
+    data.email = '';
   }
 
-  // FIX: the form collects quiz questions in "Q: / A: / X:" blocks separated by "---",
-  // not JSON. Parse that format directly instead of trying (and always failing) JSON.parse.
+  // The form collects quiz questions in "Q: / A: / X:" blocks separated by
+  // "---", not JSON. Parse that format directly.
   if (matches.quiz) {
     const quizRaw = matches.quiz[1].trim();
     const blocks = quizRaw.split('---');
@@ -78,14 +105,23 @@ function parseMarkdown(body) {
     data.quiz = quizList.length > 0 ? JSON.stringify(quizList) : '[]';
   }
 
-  const socialTargets = ['Contact Email', 'LinkedIn', 'X', 'Website'];
-  socialTargets.forEach(target => {
-    const regex = new RegExp(`### ${target}\\s+([\\s\\S]*?)(?=\\n###|$)`);
-    const found = body.match(regex);
-    if (found && found[1].trim()) {
-      data.socials[target] = found[1].trim();
+  // Social Links textarea: one "Platform: value" per line. Order of entry
+  // is preserved and duplicates/blank lines are ignored.
+  if (matches.socialLinks) {
+    const raw = matches.socialLinks[1].trim();
+    if (raw && raw !== '_No response_') {
+      raw.split('\n').forEach(line => {
+        const m = line.match(/^\s*([^:]+):\s*(.+)$/);
+        if (m) {
+          const platform = m[1].trim();
+          const value = m[2].trim();
+          if (platform && value) {
+            data.socials.push({ platform, value });
+          }
+        }
+      });
     }
-  });
+  }
 
   return data;
 }
@@ -97,47 +133,19 @@ function generateHTML() {
 
   let html = fs.readFileSync(templatePath, 'utf8');
 
-  // Build the individual Project Repository visual layout
-  let projectsHTML = '';
-  if (values.projects.length > 0 && values.github) {
-    values.projects.forEach(repo => {
-      projectsHTML += `
-      <div style="border: 1px dashed ${values.accent}80; padding: 10px; border-radius: 4px; background: rgba(0,0,0,0.2);">
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-          <a href="https://github.com/${values.github}/${repo}" target="_blank" style="color: ${values.accent}; font-weight: bold; text-decoration: none;">📦 ${repo}</a>
-          <img src="https://img.shields.io/github/stars/${values.github}/${repo}?style=flat&color=${values.accent.replace('#','')}&label=stars" alt="stars" />
-        </div>
-        <p style="margin: 5px 0 0 0; font-size: 0.9rem; color: #aaa;">Target repository link initialized. Click workspace node to view full codebase source tracking tree.</p>
-      </div>`;
-    });
-  } else {
-    projectsHTML = `<p style="color: #666;">No active feature repositories designated for pipeline build tracking.</p>`;
-  }
-
-  // Build Social links array
-  let linksHTML = '';
-  if (values.github) {
-    linksHTML += `<div style="display: flex; align-items: center; gap: 10px;">
-      <span style="color: ${values.accent}; min-width: 90px;">→ GitHub:</span>
-      <a href="https://github.com/${values.github}" target="_blank" style="color: #fff; text-decoration: underline;">github.com/${values.github}</a>
-    </div>`;
-  }
-
-  Object.keys(values.socials).forEach(key => {
-    const val = values.socials[key];
-    let url = val;
-    if (key === 'Contact Email') url = `mailto:${val}`;
-    else if (!val.startsWith('http://') && !val.startsWith('https://')) {
-      if (key === 'LinkedIn') url = `https://linkedin.com/in/${val}`;
-      if (key === 'Twitter' || key === 'X') url = `https://x.com/${val}`;
-    }
-    linksHTML += `<div style="display: flex; align-items: center; gap: 10px;">
-      <span style="color: ${values.accent}; min-width: 90px;">→ ${key}:</span>
-      <a href="${url}" target="_blank" style="color: #fff; text-decoration: underline;">${val}</a>
-    </div>`;
+  // Build dynamic social link cards from whatever the user listed.
+  let socialLinksHTML = '';
+  values.socials.forEach(({ platform, value }) => {
+    const url = buildSocialUrl(platform, value);
+    socialLinksHTML += `
+    <a class="social-link" href="${url}" target="_blank" rel="noopener">
+      ${SOCIAL_ICON}
+      <span>${platform}: ${value}</span>
+    </a>`;
   });
 
-  const emailValue = values.socials['Contact Email'] || '';
+  const emailValue = values.email || '';
+  const leetcodeValue = values.leetcode || '';
 
   html = html.replace(/\{\{NAME\}\}/g, values.name)
              .replace(/\{\{TITLE\}\}/g, values.title)
@@ -147,13 +155,12 @@ function generateHTML() {
              .replace(/\{\{CURRENT_ACTIVITY\}\}/g, values.activity)
              .replace(/\{\{TECH_STACK_CHIPS\}\}/g, values.tech)
              .replace(/\{\{GITHUB_USERNAME\}\}/g, values.github)
-             .replace(/\{\{LEETCODE_USERNAME\}\}/g, values.leetcode)
+             .replace(/\{\{LEETCODE_USERNAME\}\}/g, leetcodeValue)
+             .replace(/\{\{LEETCODE_DISPLAY\}\}/g, leetcodeValue ? 'flex' : 'none')
              .replace(/\{\{CONTACT_EMAIL\}\}/g, emailValue)
              .replace(/\{\{EMAIL_DISPLAY\}\}/g, emailValue ? 'flex' : 'none')
              .replace(/\{\{QUIZ_DATA_JSON\}\}/g, values.quiz)
-             .replace(/\{\{LEETCODE_DISPLAY\}\}/g, values.leetcode ? 'block' : 'none')
-             .replace(/\{\{SOCIAL_LINKS_BLOCK\}\}/g, linksHTML)
-             .replace(/\{\{GITHUB_PROJECTS_BLOCK\}\}/g, projectsHTML);
+             .replace(/\{\{SOCIAL_LINKS_BLOCK\}\}/g, socialLinksHTML);
 
   fs.writeFileSync(outputPath, html, 'utf8');
 }

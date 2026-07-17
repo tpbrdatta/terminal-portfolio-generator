@@ -14,7 +14,9 @@
     --ink-dim: #8B96AC;
     --line: #223051;
     --gold: {{ACCENT_COLOR}}; 
-    --gold-soft: rgba(212,162,76,0.12);
+    --gold-soft: color-mix(in srgb, var(--gold) 12%, transparent);
+    --gold-border: color-mix(in srgb, var(--gold) 30%, transparent);
+    --gold-hover: color-mix(in srgb, var(--gold) 5%, transparent);
     --green: #4CAE7F;
     --keyword: #E5645C;
     --string: #4CAE7F;
@@ -39,15 +41,19 @@
     display: flex; align-items: center;
     background: var(--bg-raised);
     border-bottom: 1px solid var(--line);
-    overflow-x: auto;
+    overflow-x: hidden;
   }
-  .tabbar .dots { display: flex; gap: 6px; padding: 0 16px; }
+  .tabbar .dots { display: flex; gap: 6px; padding: 0 16px; flex-shrink: 0; }
   .tabbar .dots span { width: 10px; height: 10px; border-radius: 50%; }
   .dots span:nth-child(1) { background: #E5645C; }
   .dots span:nth-child(2) { background: #E5B45C; }
   .dots span:nth-child(3) { background: #4CAE7F; }
   
-  .tabs-wrapper { display: flex; flex-grow: 1; overflow-x: auto; }
+  .tabs-wrapper {
+    display: flex; flex-grow: 1; overflow-x: auto;
+    scrollbar-width: none; -ms-overflow-style: none;
+  }
+  .tabs-wrapper::-webkit-scrollbar { display: none; }
   .tab {
     font-family: 'JetBrains Mono', monospace;
     font-size: 13px;
@@ -64,9 +70,9 @@
   .repo-badge {
     margin-left: auto; margin-right: 16px;
     font-family: 'JetBrains Mono', monospace; font-size: 11px;
-    background: var(--gold-soft); border: 1px solid rgba(212,162,76,0.3); color: var(--gold);
+    background: var(--gold-soft); border: 1px solid var(--gold-border); color: var(--gold);
     padding: 6px 12px; border-radius: 4px; display: flex; align-items: center; gap: 6px;
-    font-weight: 500; transition: background 0.2s, transform 0.2s; white-space: nowrap;
+    font-weight: 500; transition: background 0.2s, transform 0.2s; white-space: nowrap; flex-shrink: 0;
   }
   .repo-badge:hover { background: var(--gold); color: var(--bg); transform: translateY(-1px); }
 
@@ -106,7 +112,7 @@
   .chip-group { margin-bottom: 26px; }
   .chip-group .glabel { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--ink-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; }
   .chips { display: flex; flex-wrap: wrap; gap: 10px; }
-  .chip { font-family: 'JetBrains Mono', monospace; font-size: 13px; padding: 8px 14px; border-radius: 6px; background: var(--gold-soft); border: 1px solid rgba(212,162,76,0.3); color: var(--gold); }
+  .chip { font-family: 'JetBrains Mono', monospace; font-size: 13px; padding: 8px 14px; border-radius: 6px; background: var(--gold-soft); border: 1px solid var(--gold-border); color: var(--gold); }
 
   .proj-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
   @media (max-width: 640px) { .proj-grid { grid-template-columns: 1fr; } }
@@ -117,10 +123,6 @@
   .proj-card .proj-arrow { margin-top: 14px; font-size: 13px; color: var(--gold); font-family: 'JetBrains Mono', monospace; }
 
   #github-loading { color: var(--ink-dim); font-family: 'JetBrains Mono', monospace; font-size: 14px; }
-
-  .progress-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
-  .text-green { color: var(--green); }
-  .leetcode-badge { display: block; max-width: 100%; height: auto; border-radius: 4px; }
 
   .quiz-root { width: 100%; max-width: 640px; position: relative; }
   .win { background: var(--bg-raised); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
@@ -171,7 +173,7 @@
 
   .contact-grid { display: flex; flex-wrap: wrap; gap: 12px; }
   .social-link { display: flex; align-items: center; gap: 10px; background: var(--bg-raised); border: 1px solid var(--line); padding: 14px 18px; border-radius: 10px; font-family: 'JetBrains Mono', monospace; font-size: 14px; flex: 1 1 200px; transition: border-color .15s, background .15s; }
-  .social-link:hover { border-color: var(--gold); background: rgba(212,162,76,0.05); }
+  .social-link:hover { border-color: var(--gold); background: var(--gold-hover); }
   .social-link svg { width: 18px; height: 18px; flex-shrink: 0; color: var(--gold); }
 
   footer { text-align: center; padding: 40px 24px 60px; color: var(--ink-dim); font-family: 'JetBrains Mono', monospace; font-size: 12.5px; }
@@ -185,7 +187,6 @@
     <a class="tab active" href="#about" data-sec="about">about.md</a>
     <a class="tab" href="#now" data-sec="now">now.log</a>
     <a class="tab" href="#work" data-sec="work">projects.js</a>
-    <a class="tab" id="tab-progress" href="#progress" data-sec="progress" style="display: {{LEETCODE_DISPLAY}};">progress.json</a>
     <a class="tab" id="tab-quiz" href="#quiz" data-sec="quiz">quiz.exe</a>
     <a class="tab" href="#contact" data-sec="contact">contact.sh</a>
   </div>
@@ -222,32 +223,6 @@
   <h2>GitHub projects</h2>
   <div id="github-loading">fetching repositories...</div>
   <div class="proj-grid" id="proj-grid" style="display:none;"></div>
-
-  <div id="github-dashboard" style="margin-top: 25px;">
-    <p class="text-green">//$ fetch --source=github --user={{GITHUB_USERNAME}}</p>
-    <div style="margin-top: 10px; max-width: 450px;">
-      <img src="https://github-readme-stats.vercel.app/api?username={{GITHUB_USERNAME}}&theme=dark&hide_border=true&show_icons=true" alt="GitHub Stats" style="max-width:100%; border-radius: 4px;" />
-    </div>
-    <div style="margin-top: 15px;">
-      <p class="text-green">//$ ls ./featured-projects/</p>
-      <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 10px;">
-        {{GITHUB_PROJECTS_BLOCK}}
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="progress" style="display: {{LEETCODE_DISPLAY}};">
-  <div class="sec-label">GRINDING</div>
-  <h2>Progress</h2>
-  <div id="leetcode-section" style="display: {{LEETCODE_DISPLAY}}; margin-top: 15px;">
-    <p class="text-green">[✔] LeetCode Tracker Engaged...</p>
-    <div style="margin-top: 10px; max-width: 400px;">
-      <a href="https://leetcode.com/{{LEETCODE_USERNAME}}/" target="_blank" rel="noopener">
-        <img src="https://leetcode-stats.vercel.app/api?username={{LEETCODE_USERNAME}}&theme=dark" alt="LeetCode Stats" class="leetcode-badge" />
-      </a>
-    </div>
-  </div>
 </section>
 
 <section id="quiz">
@@ -316,6 +291,11 @@
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55v-2.14c-3.2.7-3.87-1.36-3.87-1.36-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.04 1.77 2.72 1.26 3.38.96.1-.75.4-1.26.73-1.55-2.55-.29-5.23-1.27-5.23-5.66 0-1.25.45-2.27 1.18-3.07-.12-.29-.51-1.46.11-3.04 0 0 .96-.31 3.15 1.17a10.9 10.9 0 0 1 5.74 0c2.19-1.48 3.15-1.17 3.15-1.17.62 1.58.23 2.75.11 3.04.74.8 1.18 1.82 1.18 3.07 0 4.4-2.69 5.37-5.25 5.65.41.36.78 1.06.78 2.15v3.19c0 .3.21.66.79.55A10.52 10.52 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/></svg>
       <span id="github-label"></span>
     </a>
+    <a class="social-link" id="leetcode-link" href="#" target="_blank" rel="noopener" style="display: {{LEETCODE_DISPLAY}};">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.4 16.6 4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4Zm5.2 0L19.2 12l-4.6-4.6L16 6l6 6-6 6-1.4-1.4Z"/></svg>
+      <span id="leetcode-label"></span>
+    </a>
+    {{SOCIAL_LINKS_BLOCK}}
   </div>
 </section>
 
@@ -360,6 +340,13 @@
       document.getElementById('email-link').style.display = 'none';
     }
 
+    if (profile.leetcode && profile.leetcode.indexOf('{{') === -1) {
+      document.getElementById('leetcode-link').href = `https://leetcode.com/${encodeURIComponent(profile.leetcode)}/`;
+      document.getElementById('leetcode-label').textContent = `leetcode.com/${profile.leetcode}`;
+    } else {
+      document.getElementById('leetcode-link').style.display = 'none';
+    }
+
     // Role Typing Engine
     const roles = ["→ user profile", "→ verified stack active", "→ secure configuration"];
     const el = document.getElementById('typed-role');
@@ -380,26 +367,37 @@
     }
     typeLoop();
 
-    // High Performance Intersection Observer navigation highlighter
+    // Scroll-position based nav highlighter (direction-independent, unlike
+    // IntersectionObserver rootMargin bands which can miss tall sections
+    // when scrolling upward past them quickly).
     const tabs = document.querySelectorAll('.tab');
-    const observerOptions = { root: null, rootMargin: '-40% 0px -50% 0px', threshold: 0 };
-    
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const id = entry.target.getAttribute('id');
-          tabs.forEach(t => {
-            if (t.getAttribute('data-sec') === id) {
-              t.classList.add('active');
-            } else {
-              t.classList.remove('active');
-            }
-          });
-        }
-      });
-    }, observerOptions);
+    const sections = Array.from(document.querySelectorAll('section'));
+    const headerOffset = 90;
 
-    document.querySelectorAll('section').forEach(sec => observer.observe(sec));
+    function updateActiveTab() {
+      const scrollPos = window.scrollY + headerOffset;
+      let currentId = sections[0] ? sections[0].id : null;
+      for (const sec of sections) {
+        if (sec.offsetTop <= scrollPos) {
+          currentId = sec.id;
+        } else {
+          break;
+        }
+      }
+      tabs.forEach(t => {
+        t.classList.toggle('active', t.getAttribute('data-sec') === currentId);
+      });
+    }
+
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => { updateActiveTab(); ticking = false; });
+        ticking = true;
+      }
+    }, { passive: true });
+    window.addEventListener('resize', updateActiveTab);
+    updateActiveTab();
 
     // Secure Async GitHub Repository Engine
     if (profile.github && profile.github.indexOf('{{') === -1) {
