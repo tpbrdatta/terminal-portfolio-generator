@@ -1,7 +1,6 @@
 name: "🚀 Create/Update My Portfolio"
 description: "Fill out this form to generate your terminal portfolio website instantly."
 title: "[Portfolio Setup]: Update Profile"
-# 👇 FIXED: Changed this to match your GitHub Actions yml trigger
 labels: ["profile-setup"]
 body:
   - type: markdown
@@ -13,15 +12,15 @@ body:
   - type: input
     id: name
     attributes:
-      label: Full Name
-      placeholder: "e.g., Alex Mercer"
+      label: "Full Name"
+      placeholder: "e.g., Your Name"
     validations:
       required: true
 
   - type: input
     id: title
     attributes:
-      label: Job Title / Core Focus
+      label: "Job Title / Core Focus"
       placeholder: "e.g., Computer Science Student / Backend Engineer"
     validations:
       required: true
@@ -29,15 +28,15 @@ body:
   - type: input
     id: current_status
     attributes:
-      label: Status Text
-      placeholder: "e.g., 4th Year CS Student at Tech University"
+      label: "Status Text"
+      placeholder: "e.g., nth Year CS Student at Tech University"
     validations:
       required: true
 
   - type: textarea
     id: bio
     attributes:
-      label: Biography
+      label: "Biography"
       placeholder: "Write a detailed summary about who you are, what you enjoy building, and your philosophy."
     validations:
       required: true
@@ -45,7 +44,7 @@ body:
   - type: textarea
     id: current_activity
     attributes:
-      label: Current Activity
+      label: "Current Activity"
       placeholder: "e.g., Finishing my degree, optimizing open-source database scripts, and learning systems programming."
     validations:
       required: true
@@ -53,7 +52,7 @@ body:
   - type: dropdown
     id: accent_color
     attributes:
-      label: Accent Color
+      label: "Accent Color"
       description: "Select the primary accent color vibe for your terminal layout."
       options:
         - "Classic Gold (#D4A24C)"
@@ -67,58 +66,46 @@ body:
   - type: input
     id: github_username
     attributes:
-      label: GitHub Username
+      label: "GitHub Username"
     validations:
       required: true
 
   - type: input
     id: leetcode_username
     attributes:
-      label: LeetCode Username
+      label: "LeetCode Username"
       placeholder: "Leave blank to hide the LeetCode tracking panel"
     validations:
       required: false
 
   - type: input
-      id: featured_projects
-      attributes:
-        label: Featured GitHub Projects (Comma separated)
-        placeholder: "terminal-portfolio-generator, my-nextjs-app, database-optimizer"
-        description: "List the exact names of your public repositories you want to showcase."
-      validations:
-        required: false
-
-  - type: input
     id: contact_email
     attributes:
-      label: Contact Email
+      label: "Contact Email"
       placeholder: "e.g., hello@example.com"
     validations:
       required: false
 
-  # 👇 NEW ADDITION: LinkedIn Field
   - type: input
     id: linkedin_username
     attributes:
-      label: LinkedIn
+      label: "LinkedIn"
       placeholder: "Your LinkedIn profile handle/username (Optional)"
     validations:
       required: false
 
-  # 👇 NEW ADDITION: X/Twitter Field
   - type: input
     id: x_username
     attributes:
-      label: X
+      label: "X"
       placeholder: "Your X / Twitter username (Optional)"
     validations:
       required: false
 
-  # 👇 NEW ADDITION: Website Field
   - type: input
     id: personal_website
     attributes:
-      label: Website
+      label: "Website"
       placeholder: "Your personal website URL (Optional)"
     validations:
       required: false
@@ -126,16 +113,25 @@ body:
   - type: input
     id: tech_stack
     attributes:
-      label: Tech Stack
+      label: "Tech Stack"
       placeholder: "Python, SQL, C, Linux, Git, Docker, VS Code"
     validations:
       required: true
 
+  - type: input
+    id: featured_projects
+    attributes:
+      label: "Featured GitHub Projects"
+      placeholder: "terminal-portfolio-generator, my-nextjs-app"
+      description: "List the exact names of your public repositories you want to showcase, separated by commas."
+    validations:
+      required: false
+
   - type: textarea
     id: quiz_data
     attributes:
-      label: Quiz Data
-      description: "Follow the syntax exactly. Use 'Q:' for the question, 'A:' for the single correct answer, and 'X:' for three wrong answers separated by commas. Separate each question block using three dashes (---)."
+      label: "Quiz Data"
+      description: "Follow the syntax exactly. Use 'Q:' for the question, 'A:' for the single correct answer, and 'X:' for three wrong answers separated by commas."
       value: |
         Q: What is my absolute favorite coding language?
         A: Python
