@@ -13,7 +13,7 @@
     --ink: #E9EDF5;
     --ink-dim: #8B96AC;
     --line: #223051;
-    --gold: Classic Gold (#D4A24C); 
+    --gold: #D4A24C; 
     --gold-soft: rgba(212,162,76,0.12);
     --green: #4CAE7F;
     --keyword: #E5645C;
@@ -212,7 +212,9 @@
   <div class="chip-group">
     <div class="glabel">Tech Stack & Tools</div>
     <div class="chips">
-      <span class="chip">JAVA</span>
+      <span class="chip">Linux</span>
+<span class="chip">C</span>
+<span class="chip">Python</span>
     </div>
   </div>
 </section>
@@ -232,10 +234,10 @@
       <p class="text-green">//$ ls ./featured-projects/</p>
       <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 10px;">
         
-      <div style="border: 1px dashed Classic Gold (#D4A24C)80; padding: 10px; border-radius: 4px; background: rgba(0,0,0,0.2);">
+      <div style="border: 1px dashed #D4A24C80; padding: 10px; border-radius: 4px; background: rgba(0,0,0,0.2);">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-          <a href="https://github.com/tpbrdatta/_No response_" target="_blank" style="color: Classic Gold (#D4A24C); font-weight: bold; text-decoration: none;">📦 _No response_</a>
-          <img src="https://img.shields.io/github/stars/tpbrdatta/_No response_?style=flat&color=Classic Gold (D4A24C)&label=stars" alt="stars" />
+          <a href="https://github.com/tpbrdatta/_No response_" target="_blank" style="color: #D4A24C; font-weight: bold; text-decoration: none;">📦 _No response_</a>
+          <img src="https://img.shields.io/github/stars/tpbrdatta/_No response_?style=flat&color=D4A24C&label=stars" alt="stars" />
         </div>
         <p style="margin: 5px 0 0 0; font-size: 0.9rem; color: #aaa;">Target repository link initialized. Click workspace node to view full codebase source tracking tree.</p>
       </div>
@@ -336,9 +338,9 @@
     const profile = {
       name: `Ritom Datta`,
       title: `CSE`,
-      status: `Fresher`,
-      bio: `love coding and gaming`,
-      activity: `STARTED JOURNEY`,
+      status: `4th Year`,
+      bio: `LOVE CODING`,
+      activity: `CODING CODING`,
       github: `tpbrdatta`,
       leetcode: `tpbrdatta`,
       email: `tpbrdatta@gmail.com`
@@ -443,7 +445,7 @@
     // Isolated Sanitized Quiz Core Engine
     let QUIZ_DATA = [];
     try {
-      const rawQuiz = `[]`;
+      const rawQuiz = `[{"q":"What is my absolute favorite coding language?","correct":"Python","decoys":["JavaScript","C++","Assembly"]},{"q":"What time of day do I usually commit code?","correct":"3:00 AM (Night Owl)","decoys":["6:00 AM (Early Riser)","12:00 PM (Lunch Break)","9:00 AM sharp"]},{"q":"What is my preferred workspace setup element?","correct":"Massive water bottle","decoys":["Mechanical keyboard collection","RGB strip light overload","Dual vertical monitors"]}]`;
       if (rawQuiz && rawQuiz.indexOf('{{') === -1) {
          const parsedData = JSON.parse(rawQuiz);
          if(Array.isArray(parsedData)) QUIZ_DATA = parsedData;

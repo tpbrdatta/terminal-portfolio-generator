@@ -26,13 +26,20 @@ function parseMarkdown(body) {
 
   if (matches.name) data.name = matches.name[1].trim();
   if (matches.title) data.title = matches.title[1].trim();
-  if (matches.accent) data.accent = matches.accent[1].trim();
+
+  // FIX: the dropdown value looks like "Matrix Green (#4CAE7F)" — pull just the hex.
+  if (matches.accent) {
+    const raw = matches.accent[1].trim();
+    const hexMatch = raw.match(/#([A-Fa-f0-9]{6})/);
+    data.accent = hexMatch ? hexMatch[0] : data.accent;
+  }
+
   if (matches.status) data.status = matches.status[1].trim();
   if (matches.bio) data.bio = matches.bio[1].trim();
   if (matches.activity) data.activity = matches.activity[1].trim();
   if (matches.github) data.github = matches.github[1].trim();
   if (matches.leetcode) data.leetcode = matches.leetcode[1].trim();
-  
+
   if (matches.tech) {
     data.tech = matches.tech[1].split(',').map(t => `<span class="chip">${t.trim()}</span>`).join('\n');
   }
@@ -40,15 +47,35 @@ function parseMarkdown(body) {
   if (matches.projects && matches.projects[1].trim()) {
     data.projects = matches.projects[1].split(',').map(p => p.trim()).filter(p => p.length > 0);
   }
-  
+
+  // FIX: the form collects quiz questions in "Q: / A: / X:" blocks separated by "---",
+  // not JSON. Parse that format directly instead of trying (and always failing) JSON.parse.
   if (matches.quiz) {
-    try {
-      const cleanJson = matches.quiz[1].trim();
-      JSON.parse(cleanJson); 
-      data.quiz = cleanJson;
-    } catch(e) {
-      data.quiz = '[]';
-    }
+    const quizRaw = matches.quiz[1].trim();
+    const blocks = quizRaw.split('---');
+    const quizList = [];
+
+    blocks.forEach(block => {
+      const qMatch = block.match(/Q:\s*(.*)/);
+      const aMatch = block.match(/A:\s*(.*)/);
+      const xMatch = block.match(/X:\s*(.*)/);
+
+      if (qMatch && aMatch) {
+        const decoys = xMatch
+          ? xMatch[1].split(',').map(d => d.trim()).filter(d => d.length > 0)
+          : [];
+
+        if (decoys.length > 0) {
+          quizList.push({
+            q: qMatch[1].trim(),
+            correct: aMatch[1].trim(),
+            decoys: decoys
+          });
+        }
+      }
+    });
+
+    data.quiz = quizList.length > 0 ? JSON.stringify(quizList) : '[]';
   }
 
   const socialTargets = ['Contact Email', 'LinkedIn', 'X', 'Website'];
