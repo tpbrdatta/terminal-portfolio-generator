@@ -49,13 +49,19 @@ body:
     validations:
       required: true
 
-  - type: input
-    id: accent_color
-    attributes:
-      label: Accent Theme Color (Hex)
-      placeholder: "e.g., #D4A24C (Gold), #4CAE7F (Emerald), #3B82F6 (Blue)"
-    validations:
-      required: true
+  - type: dropdown
+      id: accent_color
+      attributes:
+        label: Choose Your Theme Color
+        description: "Select the primary accent color vibe for your terminal layout."
+        options:
+          - "Classic Gold (#D4A24C)"
+          - "Matrix Green (#4CAE7F)"
+          - "Cyber Blue (#3B82F6)"
+          - "Cyberpunk Pink (#EC4899)"
+          - "Deep Purple (#A855F7)"
+      validations:
+        required: true
 
   - type: input
     id: github_username
