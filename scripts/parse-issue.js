@@ -3,24 +3,6 @@ const path = require('path');
 
 const issueBody = process.env.ISSUE_BODY || '';
 
-function normalizeAccentColor(input) {
-  const map = {
-    'Classic Gold (#D4A24C)': '#D4A24C',
-    'Matrix Green (#4CAE7F)': '#4CAE7F',
-    'Cyber Blue (#3B82F6)': '#3B82F6',
-    'Cyberpunk Pink (#EC4899)': '#EC4899',
-    'Deep Purple (#A855F7)': '#A855F7'
-  };
-
-  const value = (input || '').trim();
-  if (!value) return '#4CAE7F';
-
-  const hexMatch = value.match(/#([0-9a-fA-F]{6})/);
-  if (hexMatch) return `#${hexMatch[1].toUpperCase()}`;
-
-  return map[value] || '#4CAE7F';
-}
-
 function parseMarkdown(body) {
   const data = {
     name: '', title: '', accent: '#4CAE7F', status: '🟢 Active',
@@ -38,15 +20,13 @@ function parseMarkdown(body) {
     tech: body.match(/### Tech Stack\s+([\s\S]*?)(?=\n###|$)/),
     github: body.match(/### GitHub Username\s+([\s\S]*?)(?=\n###|$)/),
     leetcode: body.match(/### LeetCode Username\s+([\s\S]*?)(?=\n###|$)/),
-    socialPlatform: body.match(/### Social Platform\s+([\s\S]*?)(?=\n###|$)/),
-    socialUsername: body.match(/### Social Username \/ URL\s+([\s\S]*?)(?=\n###|$)/),
-    additionalSocials: body.match(/### Additional Social Links\s+([\s\S]*?)(?=\n###|$)/),
+    projects: body.match(/### Featured GitHub Projects\s+([\s\S]*?)(?=\n###|$)/),
     quiz: body.match(/### Quiz Data\s+([\s\S]*?)(?=\n###|$)/)
   };
 
   if (matches.name) data.name = matches.name[1].trim();
   if (matches.title) data.title = matches.title[1].trim();
-  if (matches.accent) data.accent = normalizeAccentColor(matches.accent[1].trim());
+  if (matches.accent) data.accent = matches.accent[1].trim();
   if (matches.status) data.status = matches.status[1].trim();
   if (matches.bio) data.bio = matches.bio[1].trim();
   if (matches.activity) data.activity = matches.activity[1].trim();
@@ -55,6 +35,10 @@ function parseMarkdown(body) {
   
   if (matches.tech) {
     data.tech = matches.tech[1].split(',').map(t => `<span class="chip">${t.trim()}</span>`).join('\n');
+  }
+
+  if (matches.projects && matches.projects[1].trim()) {
+    data.projects = matches.projects[1].split(',').map(p => p.trim()).filter(p => p.length > 0);
   }
   
   if (matches.quiz) {
@@ -76,29 +60,6 @@ function parseMarkdown(body) {
     }
   });
 
-  if (matches.socialPlatform && matches.socialUsername) {
-    const platform = matches.socialPlatform[1].trim();
-    const username = matches.socialUsername[1].trim();
-    if (platform && username && platform !== 'None') {
-      data.socials[platform] = username;
-    }
-  }
-
-  if (matches.additionalSocials) {
-    const lines = matches.additionalSocials[1].split(/\n|,/).map(s => s.trim()).filter(Boolean);
-    lines.forEach(line => {
-      const separatorIndex = line.indexOf(':');
-      if (separatorIndex === -1) return;
-      const platform = line.slice(0, separatorIndex).trim();
-      const value = line.slice(separatorIndex + 1).trim();
-      if (platform && value) data.socials[platform] = value;
-    });
-  }
-
-  if (data.leetcode) {
-    data.socials.LeetCode = data.leetcode;
-  }
-
   return data;
 }
 
@@ -109,29 +70,44 @@ function generateHTML() {
 
   let html = fs.readFileSync(templatePath, 'utf8');
 
-  // Build dynamic social links for the contact section
+  // Build the individual Project Repository visual layout
+  let projectsHTML = '';
+  if (values.projects.length > 0 && values.github) {
+    values.projects.forEach(repo => {
+      projectsHTML += `
+      <div style="border: 1px dashed ${values.accent}80; padding: 10px; border-radius: 4px; background: rgba(0,0,0,0.2);">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+          <a href="https://github.com/${values.github}/${repo}" target="_blank" style="color: ${values.accent}; font-weight: bold; text-decoration: none;">📦 ${repo}</a>
+          <img src="https://img.shields.io/github/stars/${values.github}/${repo}?style=flat&color=${values.accent.replace('#','')}&label=stars" alt="stars" />
+        </div>
+        <p style="margin: 5px 0 0 0; font-size: 0.9rem; color: #aaa;">Target repository link initialized. Click workspace node to view full codebase source tracking tree.</p>
+      </div>`;
+    });
+  } else {
+    projectsHTML = `<p style="color: #666;">No active feature repositories designated for pipeline build tracking.</p>`;
+  }
+
+  // Build Social links array
   let linksHTML = '';
+  if (values.github) {
+    linksHTML += `<div style="display: flex; align-items: center; gap: 10px;">
+      <span style="color: ${values.accent}; min-width: 90px;">→ GitHub:</span>
+      <a href="https://github.com/${values.github}" target="_blank" style="color: #fff; text-decoration: underline;">github.com/${values.github}</a>
+    </div>`;
+  }
+
   Object.keys(values.socials).forEach(key => {
     const val = values.socials[key];
-    if (!val || key === 'Contact Email') return;
-
     let url = val;
-    const normalizedKey = key.toLowerCase();
-    if (key === 'LinkedIn') url = `https://linkedin.com/in/${val}`;
-    else if (key === 'Instagram') url = `https://instagram.com/${val}`;
-    else if (key === 'Facebook') url = `https://facebook.com/${val}`;
-    else if (key === 'X' || key === 'Twitter') url = `https://x.com/${val}`;
-    else if (key === 'Reddit') url = `https://reddit.com/u/${val}`;
-    else if (key === 'LeetCode') url = `https://leetcode.com/${val}/`;
-    else if (key === 'Website' && !/^https?:\/\//i.test(val)) url = `https://${val}`;
-    else if (!/^https?:\/\//i.test(val)) {
-      url = `https://${val}`;
+    if (key === 'Contact Email') url = `mailto:${val}`;
+    else if (!val.startsWith('http://') && !val.startsWith('https://')) {
+      if (key === 'LinkedIn') url = `https://linkedin.com/in/${val}`;
+      if (key === 'Twitter' || key === 'X') url = `https://x.com/${val}`;
     }
-
-    linksHTML += `<a class="social-link" href="${url}" target="_blank" rel="noopener">
-      <span style="color: ${values.accent};">${key}</span>
-      <span>${val}</span>
-    </a>`;
+    linksHTML += `<div style="display: flex; align-items: center; gap: 10px;">
+      <span style="color: ${values.accent}; min-width: 90px;">→ ${key}:</span>
+      <a href="${url}" target="_blank" style="color: #fff; text-decoration: underline;">${val}</a>
+    </div>`;
   });
 
   const emailValue = values.socials['Contact Email'] || '';
@@ -148,17 +124,11 @@ function generateHTML() {
              .replace(/\{\{CONTACT_EMAIL\}\}/g, emailValue)
              .replace(/\{\{EMAIL_DISPLAY\}\}/g, emailValue ? 'flex' : 'none')
              .replace(/\{\{QUIZ_DATA_JSON\}\}/g, values.quiz)
-             .replace(/\{\{CONTACT_LINKS_BLOCK\}\}/g, linksHTML);
+             .replace(/\{\{LEETCODE_DISPLAY\}\}/g, values.leetcode ? 'block' : 'none')
+             .replace(/\{\{SOCIAL_LINKS_BLOCK\}\}/g, linksHTML)
+             .replace(/\{\{GITHUB_PROJECTS_BLOCK\}\}/g, projectsHTML);
 
   fs.writeFileSync(outputPath, html, 'utf8');
 }
 
-if (require.main === module) {
-  generateHTML();
-}
-
-module.exports = {
-  normalizeAccentColor,
-  parseMarkdown,
-  generateHTML
-};
+generateHTML();

@@ -13,7 +13,7 @@
     --ink: #E9EDF5;
     --ink-dim: #8B96AC;
     --line: #223051;
-    --gold: #D4A24C; 
+    --gold: Classic Gold (#D4A24C); 
     --gold-soft: rgba(212,162,76,0.12);
     --green: #4CAE7F;
     --keyword: #E5645C;
@@ -185,7 +185,7 @@
     <a class="tab active" href="#about" data-sec="about">about.md</a>
     <a class="tab" href="#now" data-sec="now">now.log</a>
     <a class="tab" href="#work" data-sec="work">projects.js</a>
-    <a class="tab" id="tab-progress" href="#progress" data-sec="progress" style="display: {{LEETCODE_DISPLAY}};">progress.json</a>
+    <a class="tab" id="tab-progress" href="#progress" data-sec="progress" style="display: block;">progress.json</a>
     <a class="tab" id="tab-quiz" href="#quiz" data-sec="quiz">quiz.exe</a>
     <a class="tab" href="#contact" data-sec="contact">contact.sh</a>
   </div>
@@ -197,9 +197,9 @@
 
 <section class="hero" id="about">
   <div class="status-line"><span class="status-dot"></span><span id="status-text"></span></div>
-  <h1 id="prof-name">Ritom Datta</h1>
-  <div class="role-line"><span id="prof-title">CSE</span> <span id="typed-role"></span><span class="caret"></span></div>
-  <p class="bio" id="prof-bio">love coding and gaming</p>
+  <h1 id="prof-name"></h1>
+  <div class="role-line"><span id="prof-title"></span> <span id="typed-role"></span><span class="caret"></span></div>
+  <p class="bio" id="prof-bio"></p>
 </section>
 
 <section id="now">
@@ -212,8 +212,7 @@
   <div class="chip-group">
     <div class="glabel">Tech Stack & Tools</div>
     <div class="chips">
-      <span class="chip">Linux</span>
-<span class="chip">JAVA</span>
+      <span class="chip">JAVA</span>
     </div>
   </div>
 </section>
@@ -223,6 +222,39 @@
   <h2>GitHub projects</h2>
   <div id="github-loading">fetching repositories...</div>
   <div class="proj-grid" id="proj-grid" style="display:none;"></div>
+
+  <div id="github-dashboard" style="margin-top: 25px;">
+    <p class="text-green">//$ fetch --source=github --user=tpbrdatta</p>
+    <div style="margin-top: 10px; max-width: 450px;">
+      <img src="https://github-readme-stats.vercel.app/api?username=tpbrdatta&theme=dark&hide_border=true&show_icons=true" alt="GitHub Stats" style="max-width:100%; border-radius: 4px;" />
+    </div>
+    <div style="margin-top: 15px;">
+      <p class="text-green">//$ ls ./featured-projects/</p>
+      <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 10px;">
+        
+      <div style="border: 1px dashed Classic Gold (#D4A24C)80; padding: 10px; border-radius: 4px; background: rgba(0,0,0,0.2);">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+          <a href="https://github.com/tpbrdatta/_No response_" target="_blank" style="color: Classic Gold (#D4A24C); font-weight: bold; text-decoration: none;">📦 _No response_</a>
+          <img src="https://img.shields.io/github/stars/tpbrdatta/_No response_?style=flat&color=Classic Gold (D4A24C)&label=stars" alt="stars" />
+        </div>
+        <p style="margin: 5px 0 0 0; font-size: 0.9rem; color: #aaa;">Target repository link initialized. Click workspace node to view full codebase source tracking tree.</p>
+      </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="progress" style="display: block;">
+  <div class="sec-label">GRINDING</div>
+  <h2>Progress</h2>
+  <div id="leetcode-section" style="display: block; margin-top: 15px;">
+    <p class="text-green">[✔] LeetCode Tracker Engaged...</p>
+    <div style="margin-top: 10px; max-width: 400px;">
+      <a href="https://leetcode.com/tpbrdatta/" target="_blank" rel="noopener">
+        <img src="https://leetcode-stats.vercel.app/api?username=tpbrdatta&theme=dark" alt="LeetCode Stats" class="leetcode-badge" />
+      </a>
+    </div>
+  </div>
 </section>
 
 <section id="quiz">
@@ -290,19 +322,6 @@
     <a class="social-link" id="github-link" href="#" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55v-2.14c-3.2.7-3.87-1.36-3.87-1.36-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.04 1.77 2.72 1.26 3.38.96.1-.75.4-1.26.73-1.55-2.55-.29-5.23-1.27-5.23-5.66 0-1.25.45-2.27 1.18-3.07-.12-.29-.51-1.46.11-3.04 0 0 .96-.31 3.15 1.17a10.9 10.9 0 0 1 5.74 0c2.19-1.48 3.15-1.17 3.15-1.17.62 1.58.23 2.75.11 3.04.74.8 1.18 1.82 1.18 3.07 0 4.4-2.69 5.37-5.25 5.65.41.36.78 1.06.78 2.15v3.19c0 .3.21.66.79.55A10.52 10.52 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/></svg>
       <span id="github-label"></span>
-    </a>
-    <a class="social-link" href="https://linkedin.com/in/_No response_" target="_blank" rel="noopener">
-      <span style="color: #D4A24C;">LinkedIn</span>
-      <span>_No response_</span>
-    </a><a class="social-link" href="https://x.com/_No response_" target="_blank" rel="noopener">
-      <span style="color: #D4A24C;">X</span>
-      <span>_No response_</span>
-    </a><a class="social-link" href="https://_No response_" target="_blank" rel="noopener">
-      <span style="color: #D4A24C;">Website</span>
-      <span>_No response_</span>
-    </a><a class="social-link" href="https://leetcode.com/tpbrdatta/" target="_blank" rel="noopener">
-      <span style="color: #D4A24C;">LeetCode</span>
-      <span>tpbrdatta</span>
     </a>
   </div>
 </section>
