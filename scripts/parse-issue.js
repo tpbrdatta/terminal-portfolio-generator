@@ -7,10 +7,9 @@ function parseMarkdown(body) {
   const data = {
     name: '', title: '', accent: '#4CAE7F', status: '🟢 Active',
     bio: '', activity: '', tech: '', github: '', leetcode: '', quiz: '[]',
-    socials: {}
+    socials: {}, projects: []
   };
 
-  // Extract core properties
   const matches = {
     name: body.match(/### Name\s+([\s\S]*?)(?=\n###|$)/),
     title: body.match(/### Title\s+([\s\S]*?)(?=\n###|$)/),
@@ -21,6 +20,7 @@ function parseMarkdown(body) {
     tech: body.match(/### Tech Stack\s+([\s\S]*?)(?=\n###|$)/),
     github: body.match(/### GitHub Username\s+([\s\S]*?)(?=\n###|$)/),
     leetcode: body.match(/### LeetCode Username\s+([\s\S]*?)(?=\n###|$)/),
+    projects: body.match(/### Featured GitHub Projects\s+([\s\S]*?)(?=\n###|$)/),
     quiz: body.match(/### Quiz Data\s+([\s\S]*?)(?=\n###|$)/)
   };
 
@@ -36,6 +36,10 @@ function parseMarkdown(body) {
   if (matches.tech) {
     data.tech = matches.tech[1].split(',').map(t => `<span class="chip">${t.trim()}</span>`).join('\n');
   }
+
+  if (matches.projects && matches.projects[1].trim()) {
+    data.projects = matches.projects[1].split(',').map(p => p.trim()).filter(p => p.length > 0);
+  }
   
   if (matches.quiz) {
     try {
@@ -47,7 +51,6 @@ function parseMarkdown(body) {
     }
   }
 
-  // List of optional connection parameters to watch for
   const socialTargets = ['Contact Email', 'LinkedIn', 'Twitter', 'X', 'Discord', 'Website'];
   socialTargets.forEach(target => {
     const regex = new RegExp(`### ${target}\\s+([\\s\\S]*?)(?=\\n###|$)`);
@@ -67,10 +70,25 @@ function generateHTML() {
 
   let html = fs.readFileSync(templatePath, 'utf8');
 
-  // Build the dynamic social connections link block
+  // Build the individual Project Repository visual layout
+  let projectsHTML = '';
+  if (values.projects.length > 0 && values.github) {
+    values.projects.forEach(repo => {
+      projectsHTML += `
+      <div style="border: 1px dashed ${values.accent}80; padding: 10px; border-radius: 4px; background: rgba(0,0,0,0.2);">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+          <a href="https://github.com/${values.github}/${repo}" target="_blank" style="color: ${values.accent}; font-weight: bold; text-decoration: none;">📦 ${repo}</a>
+          <img src="https://img.shields.io/github/stars/${values.github}/${repo}?style=flat&color=${values.accent.replace('#','')}&label=stars" alt="stars" />
+        </div>
+        <p style="margin: 5px 0 0 0; font-size: 0.9rem; color: #aaa;">Target repository link initialized. Click workspace node to view full codebase source tracking tree.</p>
+      </div>`;
+    });
+  } else {
+    projectsHTML = `<p style="color: #666;">No active feature repositories designated for pipeline build tracking.</p>`;
+  }
+
+  // Build Social links array
   let linksHTML = '';
-  
-  // Mandatory base tracking link
   if (values.github) {
     linksHTML += `<div style="display: flex; align-items: center; gap: 10px;">
       <span style="color: ${values.accent}; min-width: 90px;">→ GitHub:</span>
@@ -78,22 +96,17 @@ function generateHTML() {
     </div>`;
   }
 
-  // Iterate over all discovered optional platform headers
   Object.keys(values.socials).forEach(key => {
     const val = values.socials[key];
     let url = val;
-    let labelText = val;
-
-    if (key === 'Contact Email') {
-      url = `mailto:${val}`;
-    } else if (!val.startsWith('http://') && !val.startsWith('https://')) {
+    if (key === 'Contact Email') url = `mailto:${val}`;
+    else if (!val.startsWith('http://') && !val.startsWith('https://')) {
       if (key === 'LinkedIn') url = `https://linkedin.com/in/${val}`;
       if (key === 'Twitter' || key === 'X') url = `https://x.com/${val}`;
     }
-
     linksHTML += `<div style="display: flex; align-items: center; gap: 10px;">
       <span style="color: ${values.accent}; min-width: 90px;">→ ${key}:</span>
-      <a href="${url}" target="_blank" style="color: #fff; text-decoration: underline;">${labelText}</a>
+      <a href="${url}" target="_blank" style="color: #fff; text-decoration: underline;">${val}</a>
     </div>`;
   });
 
@@ -103,12 +116,12 @@ function generateHTML() {
              .replace(/\{\{STATUS_TEXT\}\}/g, values.status)
              .replace(/\{\{BIO\}\}/g, values.bio)
              .replace(/\{\{CURRENT_ACTIVITY\}\}/g, values.activity)
-             .replace(/\{\.TECH_STACK_CHIPS\}\}/g, values.tech)
              .replace(/\{\{TECH_STACK_CHIPS\}\}/g, values.tech)
              .replace(/\{\{LEETCODE_USERNAME\}\}/g, values.leetcode)
              .replace(/\{\{QUIZ_DATA_JSON\}\}/g, values.quiz)
              .replace(/\{\{LEETCODE_DISPLAY\}\}/g, values.leetcode ? 'block' : 'none')
-             .replace(/\{\{SOCIAL_LINKS_BLOCK\}\}/g, linksHTML);
+             .replace(/\{\{SOCIAL_LINKS_BLOCK\}\}/g, linksHTML)
+             .replace(/\{\{GITHUB_PROJECTS_BLOCK\}\}/g, projectsHTML);
 
   fs.writeFileSync(outputPath, html, 'utf8');
 }

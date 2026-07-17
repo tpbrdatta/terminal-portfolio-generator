@@ -1,7 +1,8 @@
 name: "🚀 Create/Update My Portfolio"
 description: "Fill out this form to generate your terminal portfolio website instantly."
 title: "[Portfolio Setup]: Update Profile"
-labels: ["portfolio-builder"]
+# 👇 FIXED: Changed this to match your GitHub Actions yml trigger
+labels: ["profile-setup"]
 body:
   - type: markdown
     attributes:
@@ -28,7 +29,7 @@ body:
   - type: input
     id: current_status
     attributes:
-      label: Current Status Header
+      label: Status Text
       placeholder: "e.g., 4th Year CS Student at Tech University"
     validations:
       required: true
@@ -44,7 +45,7 @@ body:
   - type: textarea
     id: current_activity
     attributes:
-      label: What You Are Doing Now (now.log)
+      label: Current Activity
       placeholder: "e.g., Finishing my degree, optimizing open-source database scripts, and learning systems programming."
     validations:
       required: true
@@ -52,7 +53,7 @@ body:
   - type: dropdown
     id: accent_color
     attributes:
-      label: Choose Your Theme Color
+      label: Accent Color
       description: "Select the primary accent color vibe for your terminal layout."
       options:
         - "Classic Gold (#D4A24C)"
@@ -73,23 +74,59 @@ body:
   - type: input
     id: leetcode_username
     attributes:
-      label: LeetCode Username (Optional)
+      label: LeetCode Username
       placeholder: "Leave blank to hide the LeetCode tracking panel"
     validations:
       required: false
 
   - type: input
+      id: featured_projects
+      attributes:
+        label: Featured GitHub Projects (Comma separated)
+        placeholder: "terminal-portfolio-generator, my-nextjs-app, database-optimizer"
+        description: "List the exact names of your public repositories you want to showcase."
+      validations:
+        required: false
+
+  - type: input
     id: contact_email
     attributes:
-      label: Contact Email Address (Optional)
+      label: Contact Email
       placeholder: "e.g., hello@example.com"
+    validations:
+      required: false
+
+  # 👇 NEW ADDITION: LinkedIn Field
+  - type: input
+    id: linkedin_username
+    attributes:
+      label: LinkedIn
+      placeholder: "Your LinkedIn profile handle/username (Optional)"
+    validations:
+      required: false
+
+  # 👇 NEW ADDITION: X/Twitter Field
+  - type: input
+    id: x_username
+    attributes:
+      label: X
+      placeholder: "Your X / Twitter username (Optional)"
+    validations:
+      required: false
+
+  # 👇 NEW ADDITION: Website Field
+  - type: input
+    id: personal_website
+    attributes:
+      label: Website
+      placeholder: "Your personal website URL (Optional)"
     validations:
       required: false
 
   - type: input
     id: tech_stack
     attributes:
-      label: Tech Stack & Tools (Comma separated)
+      label: Tech Stack
       placeholder: "Python, SQL, C, Linux, Git, Docker, VS Code"
     validations:
       required: true
@@ -97,7 +134,7 @@ body:
   - type: textarea
     id: quiz_data
     attributes:
-      label: Personality Quiz Configuration (Up to 4 Questions)
+      label: Quiz Data
       description: "Follow the syntax exactly. Use 'Q:' for the question, 'A:' for the single correct answer, and 'X:' for three wrong answers separated by commas. Separate each question block using three dashes (---)."
       value: |
         Q: What is my absolute favorite coding language?

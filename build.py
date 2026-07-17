@@ -87,6 +87,7 @@ def parse_issue_and_build():
     html = html.replace('{{ACCENT_COLOR}}', accent_color)
     html = html.replace('{{TECH_STACK_CHIPS}}', tech_chips)
     html = html.replace('{{GITHUB_USERNAME}}', github_user)
+    html = html.replace('{{GITHUB_PROJECTS_BLOCK}}', '')
     
     html = html.replace('{{QUIZ_DATA_JSON}}', json.dumps(quiz_list))
 

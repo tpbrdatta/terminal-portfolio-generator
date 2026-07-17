@@ -222,6 +222,19 @@
   <h2>GitHub projects</h2>
   <div id="github-loading">fetching repositories...</div>
   <div class="proj-grid" id="proj-grid" style="display:none;"></div>
+
+  <div id="github-dashboard" style="margin-top: 25px;">
+    <p class="text-green">//$ fetch --source=github --user={{GITHUB_USERNAME}}</p>
+    <div style="margin-top: 10px; max-width: 450px;">
+      <img src="https://github-readme-stats.vercel.app/api?username={{GITHUB_USERNAME}}&theme=dark&hide_border=true&show_icons=true" alt="GitHub Stats" style="max-width:100%; border-radius: 4px;" />
+    </div>
+    <div style="margin-top: 15px;">
+      <p class="text-green">//$ ls ./featured-projects/</p>
+      <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 10px;">
+        {{GITHUB_PROJECTS_BLOCK}}
+      </div>
+    </div>
+  </div>
 </section>
 
 <section id="progress" style="display: {{LEETCODE_DISPLAY}};">
