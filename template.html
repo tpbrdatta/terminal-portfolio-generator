@@ -119,20 +119,8 @@
   #github-loading { color: var(--ink-dim); font-family: 'JetBrains Mono', monospace; font-size: 14px; }
 
   .progress-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
-  .progress-card { background: var(--bg-raised); border: 1px solid var(--line); border-radius: 12px; padding: 24px; }
-  .progress-card .pc-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
-  .progress-card .pc-title { font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: 15px; }
-  .progress-card .pc-user { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--ink-dim); }
-  .progress-card .pc-loading { color: var(--ink-dim); font-family: 'JetBrains Mono', monospace; font-size: 13px; }
-  .pc-stat-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 14px; }
-  .pc-stat-row .pc-label { color: var(--ink-dim); }
-  .pc-stat-row .pc-value { font-family: 'JetBrains Mono', monospace; font-weight: 600; }
-  .pc-bar-track { height: 6px; border-radius: 4px; background: var(--line); overflow: hidden; margin-top: 4px; }
-  .pc-bar-fill { height: 100%; border-radius: 4px; background: var(--gold); transition: width .6s ease; }
-  .pc-diff-row { display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--ink-dim); margin-top: 14px; }
-  .pc-diff-row span.easy { color: var(--green); }
-  .pc-diff-row span.med { color: var(--gold); }
-  .pc-diff-row span.hard { color: #E5645C; }
+  .text-green { color: var(--green); }
+  .leetcode-badge { display: block; max-width: 100%; height: auto; border-radius: 4px; }
 
   .quiz-root { width: 100%; max-width: 640px; position: relative; }
   .win { background: var(--bg-raised); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
@@ -239,25 +227,12 @@
 <section id="progress" style="display: {{LEETCODE_DISPLAY}};">
   <div class="sec-label">GRINDING</div>
   <h2>Progress</h2>
-  <div class="progress-grid">
-    <div class="progress-card" id="leetcode-card">
-      <div class="pc-head">
-        <div class="pc-title">LeetCode</div>
-        <div class="pc-user" id="lc-user-label"></div>
-      </div>
-      <div class="pc-loading" id="leetcode-loading">fetching stats ...</div>
-      <div id="leetcode-body" style="display:none;">
-        <div class="pc-stat-row">
-          <span class="pc-label">Total solved</span>
-          <span class="pc-value" id="lc-total">—</span>
-        </div>
-        <div class="pc-bar-track"><div class="pc-bar-fill" id="lc-bar" style="width:0%"></div></div>
-        <div class="pc-diff-row">
-          <span class="easy" id="lc-easy">Easy —</span>
-          <span class="med" id="lc-med">Medium —</span>
-          <span class="hard" id="lc-hard">Hard —</span>
-        </div>
-      </div>
+  <div id="leetcode-section" style="display: {{LEETCODE_DISPLAY}}; margin-top: 15px;">
+    <p class="text-green">[✔] LeetCode Tracker Engaged...</p>
+    <div style="margin-top: 10px; max-width: 400px;">
+      <a href="https://leetcode.com/{{LEETCODE_USERNAME}}/" target="_blank" rel="noopener">
+        <img src="https://leetcode-stats.vercel.app/api?username={{LEETCODE_USERNAME}}&theme=dark" alt="LeetCode Stats" class="leetcode-badge" />
+      </a>
     </div>
   </div>
 </section>
@@ -442,26 +417,6 @@
           });
         }).catch(() => {
           document.getElementById('github-loading').textContent = 'failed to securely index repositories.';
-        });
-    }
-
-    // LeetCode Secure Pipeline Fetcher
-    if(profile.leetcode && "{{LEETCODE_DISPLAY}}" !== "none" && profile.leetcode.indexOf('{{') === -1) {
-      document.getElementById('lc-user-label').textContent = `@${profile.leetcode}`;
-      fetch(`https://leetcode-stats-inky.vercel.app/?username=${encodeURIComponent(profile.leetcode)}`)
-        .then(r => r.ok ? r.json() : Promise.reject())
-        .then(data => {
-          document.getElementById('leetcode-loading').style.display = 'none';
-          document.getElementById('leetcode-body').style.display = 'block';
-          const pct = data.totalQuestions ? Math.round((data.totalSolved / data.totalQuestions) * 100) : 0;
-          document.getElementById('lc-total').textContent = `${data.totalSolved} / ${data.totalQuestions}`;
-          document.getElementById('lc-bar').style.width = pct + '%';
-          document.getElementById('lc-easy').textContent = `Easy ${data.easySolved}`;
-          document.getElementById('lc-med').textContent = `Medium ${data.mediumSolved}`;
-          document.getElementById('lc-hard').textContent = `Hard ${data.hardSolved}`;
-        })
-        .catch(() => {
-          document.getElementById('leetcode-loading').textContent = 'could not pull secure analytical metrics.';
         });
     }
 
