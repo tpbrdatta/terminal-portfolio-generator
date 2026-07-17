@@ -74,7 +74,7 @@ body:
     id: leetcode_username
     attributes:
       label: "LeetCode Username"
-      placeholder: "Leave blank to hide the LeetCode tracking panel"
+      placeholder: "Shown as a link in the Contact section. Leave blank to hide it."
     validations:
       required: false
 
@@ -86,27 +86,34 @@ body:
     validations:
       required: false
 
-  - type: input
-    id: linkedin_username
+  - type: dropdown
+    id: social_platforms
     attributes:
-      label: "LinkedIn"
-      placeholder: "Your LinkedIn profile handle/username (Optional)"
+      label: "Social Platforms"
+      description: "Pick every platform you want a link for. Then add the matching username/URL for each one below in 'Social Links'."
+      multiple: true
+      options:
+        - "LinkedIn"
+        - "X"
+        - "Instagram"
+        - "Facebook"
+        - "Reddit"
+        - "YouTube"
+        - "Discord"
+        - "Telegram"
+        - "Website"
     validations:
       required: false
 
-  - type: input
-    id: x_username
+  - type: textarea
+    id: social_links
     attributes:
-      label: "X"
-      placeholder: "Your X / Twitter username (Optional)"
-    validations:
-      required: false
-
-  - type: input
-    id: personal_website
-    attributes:
-      label: "Website"
-      placeholder: "Your personal website URL (Optional)"
+      label: "Social Links"
+      description: "One line per platform you selected above, formatted exactly as 'Platform: value'. Use just your username for most platforms (e.g. 'X: johnsmith'); use the full URL for Website (e.g. 'Website: https://example.com')."
+      placeholder: |
+        LinkedIn: your-handle
+        X: your-handle
+        Instagram: your-handle
     validations:
       required: false
 
@@ -117,15 +124,6 @@ body:
       placeholder: "Python, SQL, C, Linux, Git, Docker, VS Code"
     validations:
       required: true
-
-  - type: input
-    id: featured_projects
-    attributes:
-      label: "Featured GitHub Projects"
-      placeholder: "terminal-portfolio-generator, my-nextjs-app"
-      description: "List the exact names of your public repositories you want to showcase, separated by commas."
-    validations:
-      required: false
 
   - type: textarea
     id: quiz_data
