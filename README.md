@@ -127,12 +127,12 @@ There's no backend and no database — just GitHub's own primitives, chained tog
   </tr>
   <tr>
     <td align="center" width="50%">
-      <img src="assets/ss3.png" alt="LeetCode stats tab screenshot" width="100%"><br>
-      <sub>🧮 <b>LeetCode Stats</b> — real-time problem-solving performance</sub>
+      <img src="assets/ss3.png" alt="Quiz stats tab screenshot" width="100%"><br>
+      <sub>🎮 <b>Quiz Sandbox</b> — the interactive, customizable quiz panel</sub>
     </td>
     <td align="center" width="50%">
       <img src="assets/ss4.png" alt="Quiz sandbox tab screenshot" width="100%"><br>
-      <sub>🎮 <b>Quiz Sandbox</b> — the interactive, customizable quiz panel</sub>
+      <sub>☎️ <b>Socials</b> — the interactive, customizable social panel</sub>
     </td>
   </tr>
 </table>
