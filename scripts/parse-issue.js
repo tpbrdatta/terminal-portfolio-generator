@@ -22,6 +22,12 @@ function buildSocialUrl(platform, value) {
   return v;
 }
 
+// Proper-cases short label fields (job titles, tech names). Not used on
+// bio/activity, which are full sentences and would get mangled.
+function titleCase(str) {
+  return str.replace(/\w\S*/g, w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase());
+}
+
 // Generic "link" glyph used for every dynamic social platform, so we don't
 // have to guess at (and risk misrepresenting) individual brand marks.
 const SOCIAL_ICON = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>';
@@ -49,7 +55,7 @@ function parseMarkdown(body) {
   };
 
   if (matches.name) data.name = matches.name[1].trim();
-  if (matches.title) data.title = matches.title[1].trim();
+  if (matches.title) data.title = titleCase(matches.title[1].trim());
 
   // The dropdown value looks like "Matrix Green (#4CAE7F)" — pull just the hex.
   if (matches.accent) {
@@ -65,7 +71,10 @@ function parseMarkdown(body) {
   if (matches.leetcode) data.leetcode = matches.leetcode[1].trim();
 
   if (matches.tech) {
-    data.tech = matches.tech[1].split(',').map(t => `<span class="chip">${t.trim()}</span>`).join('\n');
+    data.tech = matches.tech[1]
+      .split(',')
+      .map(t => `<span class="chip">${titleCase(t.trim())}</span>`)
+      .join('\n');
   }
 
   if (matches.contactEmail) {
