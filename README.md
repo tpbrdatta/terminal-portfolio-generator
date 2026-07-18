@@ -123,12 +123,12 @@ There's no dashboard, no backend, and no database here — the entire system run
   </tr>
   <tr>
     <td align="center" width="50%">
-      <img src="assets/ss3.png" alt="LeetCode stats tab screenshot" width="100%"><br>
-      <sub><b>LeetCode Stats</b> — real-time problem-solving performance</sub>
+      <img src="assets/ss3.png" alt="Quiz sandbox tab screenshot" width="100%"><br>
+      <sub><b>Quiz Sandbox</b> — the interactive, customizable quiz panel
     </td>
     <td align="center" width="50%">
-      <img src="assets/ss4.png" alt="Quiz sandbox tab screenshot" width="100%"><br>
-      <sub><b>Quiz Sandbox</b> — the interactive, customizable quiz panel</sub>
+      <img src="assets/ss4.png" alt="socials tab screenshot" width="100%"><br>
+      <sub><b>Contacts</b> — the interactive, customizable social contact panel</sub>
     </td>
   </tr>
 </table>
