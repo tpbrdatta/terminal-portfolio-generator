@@ -28,6 +28,54 @@ function titleCase(str) {
   return str.replace(/\w\S*/g, w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase());
 }
 
+// Derive a small coherent palette from the single accent hex the user picks,
+// so more of the UI's syntax-highlight colors track their choice instead of
+// being hardcoded.
+function hexToHsl(hex) {
+  let r = parseInt(hex.slice(1, 3), 16) / 255;
+  let g = parseInt(hex.slice(3, 5), 16) / 255;
+  let b = parseInt(hex.slice(5, 7), 16) / 255;
+  const max = Math.max(r, g, b), min = Math.min(r, g, b);
+  let h, s, l = (max + min) / 2;
+  if (max === min) { h = s = 0; }
+  else {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+      case g: h = (b - r) / d + 2; break;
+      case b: h = (r - g) / d + 4; break;
+    }
+    h *= 60;
+  }
+  return [h, s * 100, l * 100];
+}
+
+function hslToHex(h, s, l) {
+  s /= 100; l /= 100;
+  const c = (1 - Math.abs(2 * l - 1)) * s;
+  const x = c * (1 - Math.abs((h / 60) % 2 - 1));
+  const m = l - c / 2;
+  let r, g, b;
+  if (h < 60) [r, g, b] = [c, x, 0];
+  else if (h < 120) [r, g, b] = [x, c, 0];
+  else if (h < 180) [r, g, b] = [0, c, x];
+  else if (h < 240) [r, g, b] = [0, x, c];
+  else if (h < 300) [r, g, b] = [x, 0, c];
+  else [r, g, b] = [c, 0, x];
+  const toHex = v => Math.round((v + m) * 255).toString(16).padStart(2, '0');
+  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+}
+
+function derivePalette(accentHex) {
+  const [h, s, l] = hexToHsl(accentHex);
+  return {
+    string: hslToHex((h + 100) % 360, Math.min(s, 55), Math.max(l - 5, 35)),
+    keyword: hslToHex((h + 200) % 360, Math.min(s + 10, 70), Math.min(l + 5, 65)),
+    type: hslToHex((h + 150) % 360, Math.min(s, 50), Math.min(l + 15, 70))
+  };
+}
+
 // Generic "link" glyph used for every dynamic social platform, so we don't
 // have to guess at (and risk misrepresenting) individual brand marks.
 const SOCIAL_ICON = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>';
@@ -137,6 +185,7 @@ function parseMarkdown(body) {
 
 function generateHTML() {
   const values = parseMarkdown(issueBody);
+  const palette = derivePalette(values.accent);
   const templatePath = path.join(__dirname, '../template.html');
   const outputPath = path.join(__dirname, '../index.html');
 
@@ -169,7 +218,10 @@ function generateHTML() {
              .replace(/\{\{CONTACT_EMAIL\}\}/g, emailValue)
              .replace(/\{\{EMAIL_DISPLAY\}\}/g, emailValue ? 'flex' : 'none')
              .replace(/\{\{QUIZ_DATA_JSON\}\}/g, values.quiz)
-             .replace(/\{\{SOCIAL_LINKS_BLOCK\}\}/g, socialLinksHTML);
+             .replace(/\{\{SOCIAL_LINKS_BLOCK\}\}/g, socialLinksHTML)
+             .replace(/\{\{STRING_COLOR\}\}/g, palette.string)
+             .replace(/\{\{KEYWORD_COLOR\}\}/g, palette.keyword)
+             .replace(/\{\{TYPE_COLOR\}\}/g, palette.type);
 
   fs.writeFileSync(outputPath, html, 'utf8');
 }

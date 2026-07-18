@@ -60,6 +60,9 @@ body:
         - "Cyber Blue (#3B82F6)"
         - "Cyberpunk Pink (#EC4899)"
         - "Deep Purple (#A855F7)"
+        - "Sunset Orange (#F97316)"
+        - "Ice Teal (#2DD4BF)"
+        - "Blood Red (#EF4444)"
     validations:
       required: true
 

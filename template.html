@@ -13,14 +13,14 @@
     --ink: #E9EDF5;
     --ink-dim: #8B96AC;
     --line: #223051;
-    --gold: {{ACCENT_COLOR}}; 
-    --gold-soft: color-mix(in srgb, var(--gold) 12%, transparent);
+    --gold: {{ACCENT_COLOR}};
+    --gold-soft: rgba(212,162,76,0.12);
     --gold-border: color-mix(in srgb, var(--gold) 30%, transparent);
     --gold-hover: color-mix(in srgb, var(--gold) 5%, transparent);
     --green: #4CAE7F;
-    --keyword: #E5645C;
-    --string: #4CAE7F;
-    --type: #66d9ef;
+    --keyword: {{KEYWORD_COLOR}};
+    --string: {{STRING_COLOR}};
+    --type: {{TYPE_COLOR}};
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -176,19 +176,60 @@
   .social-link:hover { border-color: var(--gold); background: var(--gold-hover); }
   .social-link svg { width: 18px; height: 18px; flex-shrink: 0; color: var(--gold); }
 
+  #bgFx { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+  #backToTop {
+    position: fixed; bottom: 24px; right: 24px; z-index: 60;
+    width: 44px; height: 44px; border-radius: 50%;
+    background: rgba(16,26,46,0.55); backdrop-filter: blur(6px);
+    border: 1px solid var(--line); color: var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; opacity: 0; pointer-events: none;
+    transition: opacity .25s ease, transform .2s ease, border-color .2s ease;
+  }
+  #backToTop.visible { opacity: 1; pointer-events: auto; }
+  #backToTop:hover { border-color: var(--gold); transform: translateY(-2px); }
+  #backToTop svg { width: 18px; height: 18px; }
+
+  .fx-selector {
+    position: fixed; bottom: 24px; left: 24px; z-index: 60;
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+  }
+  .fx-toggle {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: rgba(16,26,46,0.55); backdrop-filter: blur(6px);
+    border: 1px solid var(--line); color: var(--ink-dim);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 18px; transition: border-color .2s;
+  }
+  .fx-toggle:hover { border-color: var(--gold); color: var(--gold); }
+  .fx-menu {
+    position: absolute; bottom: 54px; left: 0;
+    background: var(--bg-raised); border: 1px solid var(--line); border-radius: 8px;
+    padding: 6px; display: none; flex-direction: column; gap: 2px; min-width: 130px;
+  }
+  .fx-menu.open { display: flex; }
+  .fx-menu button {
+    background: none; border: none; color: var(--ink-dim); text-align: left;
+    padding: 8px 10px; border-radius: 6px; cursor: pointer; font: inherit;
+  }
+  .fx-menu button:hover { background: rgba(255,255,255,0.04); color: var(--ink); }
+  .fx-menu button.active { color: var(--gold); }
+
   footer { text-align: center; padding: 40px 24px 60px; color: var(--ink-dim); font-family: 'JetBrains Mono', monospace; font-size: 12.5px; }
 </style>
 </head>
 <body>
+<canvas id="bgFx"></canvas>
 
 <div class="tabbar">
   <div class="dots"><span></span><span></span><span></span></div>
   <div class="tabs-wrapper" id="tabs-container">
-    <a class="tab active" href="#about" data-sec="about">about.md</a>
-    <a class="tab" href="#now" data-sec="now">now.log</a>
-    <a class="tab" href="#work" data-sec="work">projects.js</a>
-    <a class="tab" id="tab-quiz" href="#quiz" data-sec="quiz">quiz.exe</a>
-    <a class="tab" href="#contact" data-sec="contact">contact.sh</a>
+    <a class="tab active" href="javascript:void(0)" data-sec="about">about.md</a>
+    <a class="tab" href="javascript:void(0)" data-sec="now">now.log</a>
+    <a class="tab" href="javascript:void(0)" data-sec="work">projects.js</a>
+    <a class="tab" id="tab-progress" href="javascript:void(0)" data-sec="progress" style="display: {{LEETCODE_DISPLAY}};">progress.json</a>
+    <a class="tab" id="tab-quiz" href="javascript:void(0)" data-sec="quiz">quiz.exe</a>
+    <a class="tab" href="javascript:void(0)" data-sec="contact">contact.sh</a>
   </div>
   <a class="repo-badge" href="https://github.com/tpbrdatta/terminal-portfolio-generator" target="_blank" rel="noopener">
     <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
@@ -299,6 +340,21 @@
   </div>
 </section>
 
+<button id="backToTop" aria-label="Back to top">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
+
+<div class="fx-selector">
+  <button class="fx-toggle" id="fxToggleBtn">✦</button>
+  <div class="fx-menu" id="fxMenu">
+    <button data-fx="none">None</button>
+    <button data-fx="bubbles">Bubbles</button>
+    <button data-fx="snow">Snowfall</button>
+    <button data-fx="rain">Rain</button>
+    <button data-fx="stars">Shooting stars</button>
+  </div>
+</div>
+
 <footer>
   built automatically via GitHub Actions form processing — 2026
 </footer>
@@ -389,15 +445,128 @@
       });
     }
 
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const id = tab.getAttribute('data-sec');
+        const target = document.getElementById(id);
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+
+    function checkBottomOverride() {
+      const scrolledToBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 150;
+      if (scrolledToBottom) {
+        tabs.forEach(t => t.classList.toggle('active', t.getAttribute('data-sec') === 'contact'));
+      }
+    }
+
     let ticking = false;
     window.addEventListener('scroll', () => {
       if (!ticking) {
-        window.requestAnimationFrame(() => { updateActiveTab(); ticking = false; });
+        window.requestAnimationFrame(() => { updateActiveTab(); checkBottomOverride(); ticking = false; });
         ticking = true;
       }
     }, { passive: true });
     window.addEventListener('resize', updateActiveTab);
     updateActiveTab();
+    checkBottomOverride();
+
+    const backToTop = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+      backToTop.classList.toggle('visible', window.scrollY > 400);
+    }, { passive: true });
+    backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    // Background particle effects
+    (function() {
+      const canvas = document.getElementById('bgFx');
+      const ctx = canvas.getContext('2d');
+      let particles = [], mode = localStorage.getItem('portfolio-fx') || 'none';
+      let running = true, w, h;
+
+      function resize() { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
+      window.addEventListener('resize', resize); resize();
+
+      function spawn() {
+        particles = [];
+        const count = mode === 'rain' ? 120 : mode === 'snow' ? 80 : mode === 'stars' ? 12 : 40;
+        for (let i = 0; i < count; i++) particles.push(makeParticle(true));
+      }
+
+      function makeParticle(initial) {
+        if (mode === 'bubbles') {
+          return { x: Math.random()*w, y: initial ? Math.random()*h : h+20, r: 2+Math.random()*6, spd: 0.3+Math.random()*0.8, sway: Math.random()*2-1, alpha: 0.1+Math.random()*0.25 };
+        }
+        if (mode === 'snow') {
+          return { x: Math.random()*w, y: initial ? Math.random()*h : -10, r: 1+Math.random()*3, spd: 0.4+Math.random()*1, sway: Math.random()*1-0.5, alpha: 0.3+Math.random()*0.5 };
+        }
+        if (mode === 'rain') {
+          return { x: Math.random()*w, y: initial ? Math.random()*h : -20, len: 10+Math.random()*14, spd: 6+Math.random()*6, alpha: 0.15+Math.random()*0.2 };
+        }
+        if (mode === 'stars') {
+          return { x: Math.random()*w*0.6, y: Math.random()*h*0.4, len: 60+Math.random()*80, spd: 8+Math.random()*6, angle: 0.5, alpha: 1, life: 0, maxLife: 60+Math.random()*80, delay: Math.random()*300 };
+        }
+        return {};
+      }
+
+      function step() {
+        ctx.clearRect(0, 0, w, h);
+
+        if (mode === 'bubbles') {
+          particles.forEach(p => {
+            p.y -= p.spd; p.x += Math.sin(p.y*0.01)*p.sway*0.3;
+            if (p.y < -10) { p.y = h+10; p.x = Math.random()*w; }
+            ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+            ctx.strokeStyle = `rgba(212,162,76,${p.alpha})`; ctx.stroke();
+          });
+        } else if (mode === 'snow') {
+          particles.forEach(p => {
+            p.y += p.spd; p.x += p.sway;
+            if (p.y > h+10) { p.y = -10; p.x = Math.random()*w; }
+            ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+            ctx.fillStyle = `rgba(233,237,245,${p.alpha})`; ctx.fill();
+          });
+        } else if (mode === 'rain') {
+          particles.forEach(p => {
+            p.y += p.spd;
+            if (p.y > h+20) { p.y = -20; p.x = Math.random()*w; }
+            ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p.x-2, p.y+p.len);
+            ctx.strokeStyle = `rgba(140,170,220,${p.alpha})`; ctx.stroke();
+          });
+        } else if (mode === 'stars') {
+          particles.forEach(p => {
+            if (p.delay > 0) { p.delay--; return; }
+            p.life++;
+            const t = p.life / p.maxLife;
+            if (t >= 1) { Object.assign(p, makeParticle(false), { delay: 100+Math.random()*400 }); return; }
+            const cx = p.x + p.spd * p.life * Math.cos(p.angle);
+            const cy = p.y + p.spd * p.life * Math.sin(p.angle);
+            const grad = ctx.createLinearGradient(cx, cy, cx - p.len*Math.cos(p.angle), cy - p.len*Math.sin(p.angle));
+            grad.addColorStop(0, `rgba(255,255,255,${1-t})`); grad.addColorStop(1, 'rgba(255,255,255,0)');
+            ctx.strokeStyle = grad; ctx.lineWidth = 1.5;
+            ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx - p.len*Math.cos(p.angle), cy - p.len*Math.sin(p.angle)); ctx.stroke();
+          });
+        }
+        if (running && mode !== 'none') requestAnimationFrame(step);
+      }
+
+      function setMode(m) {
+        mode = m; localStorage.setItem('portfolio-fx', m);
+        document.querySelectorAll('.fx-menu button').forEach(b => b.classList.toggle('active', b.dataset.fx === m));
+        if (m === 'none') { ctx.clearRect(0,0,w,h); return; }
+        spawn(); requestAnimationFrame(step);
+      }
+
+      document.addEventListener('visibilitychange', () => { running = !document.hidden; if (running && mode !== 'none') requestAnimationFrame(step); });
+
+      const fxToggleBtn = document.getElementById('fxToggleBtn');
+      const fxMenu = document.getElementById('fxMenu');
+      fxToggleBtn.addEventListener('click', () => fxMenu.classList.toggle('open'));
+      document.addEventListener('click', e => { if (!e.target.closest('.fx-selector')) fxMenu.classList.remove('open'); });
+      document.querySelectorAll('.fx-menu button').forEach(b => b.addEventListener('click', () => setMode(b.dataset.fx)));
+
+      setMode(mode);
+    })();
 
     // Secure Async GitHub Repository Engine
     if (profile.github && profile.github.indexOf('{{') === -1) {
