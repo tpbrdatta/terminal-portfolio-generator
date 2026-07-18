@@ -110,29 +110,86 @@ There's no dashboard, no backend, and no database here — the entire system run
 
 *(example screenshots — replace with your own once your portfolio is live)*
 
-<table>
-  <tr>
-    <td align="center" width="50%">
-      <img src="assets/ss1.png" alt="Workspace tab screenshot" width="100%"><br>
-      <sub><b>Workspace</b> — the code-editor-style landing layout</sub>
-    </td>
-    <td align="center" width="50%">
-      <img src="assets/ss2.png" alt="GitHub stats tab screenshot" width="100%"><br>
-      <sub><b>GitHub Stats</b> — live-pulled contribution and repo data</sub>
-    </td>
-  </tr>
-  <tr>
-    <td align="center" width="50%">
-      <img src="assets/ss3.png" alt="Quiz sandbox tab screenshot" width="100%"><br>
-      <sub><b>Quiz Sandbox</b> — the interactive, customizable quiz panel
-    </td>
-    <td align="center" width="50%">
-      <img src="assets/ss4.png" alt="socials tab screenshot" width="100%"><br>
-      <sub><b>Contacts</b> — the interactive, customizable social contact panel</sub>
-    </td>
-  </tr>
-</table>
+<div align="center">
+<img src="assets/phone-mockup.svg" alt="App preview" width="280">
 
+<p><sub>tap an app below to see its details</sub></p>
+</div>
+
+<br>
+
+<table>
+<tr>
+<td width="50%" valign="top">
+
+<details>
+<summary><b>🟣 Workspace</b></summary>
+<br>
+
+![HTML](https://img.shields.io/badge/HTML-5b3ff0?style=flat-square&labelColor=1c1c22)
+![JS](https://img.shields.io/badge/JS-5b3ff0?style=flat-square&labelColor=1c1c22)
+![UI](https://img.shields.io/badge/Code--editor%20UI-5b3ff0?style=flat-square&labelColor=1c1c22)
+
+The landing layout, styled like a code editor with tabbed navigation.
+
+<img src="assets/ss1.png" width="100%">
+
+</details>
+
+</td>
+<td width="50%" valign="top">
+
+<details>
+<summary><b>🟢 GitHub Stats</b></summary>
+<br>
+
+![Live API](https://img.shields.io/badge/Live%20API-0f9d6e?style=flat-square&labelColor=1c1c22)
+![Contributions](https://img.shields.io/badge/Contributions-0f9d6e?style=flat-square&labelColor=1c1c22)
+![Repos](https://img.shields.io/badge/Repos-0f9d6e?style=flat-square&labelColor=1c1c22)
+
+Pulls your live GitHub contribution graph and repo data on every build.
+
+<img src="assets/ss2.png" width="100%">
+
+</details>
+
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+
+<details>
+<summary><b>🟠 Quiz Sandbox</b></summary>
+<br>
+
+![Interactive](https://img.shields.io/badge/Interactive-ea580c?style=flat-square&labelColor=1c1c22)
+![Customizable](https://img.shields.io/badge/Customizable-ea580c?style=flat-square&labelColor=1c1c22)
+
+A built-in quiz widget visitors can play, configurable per topic.
+
+<img src="assets/ss3.png" width="100%">
+
+</details>
+
+</td>
+<td width="50%" valign="top">
+
+<details>
+<summary><b>🩷 Contacts</b></summary>
+<br>
+
+![Socials](https://img.shields.io/badge/Socials-db2777?style=flat-square&labelColor=1c1c22)
+![Customizable](https://img.shields.io/badge/Customizable-db2777?style=flat-square&labelColor=1c1c22)
+
+An interactive panel linking out to your social and contact channels.
+
+<img src="assets/ss4.png" width="100%">
+
+</details>
+
+</td>
+</tr>
+</table>
 ---
 
 ## `$ fork --countdown`

@@ -1,0 +1,88 @@
+<svg viewBox="0 0 400 520" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="frame" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2b2b2e"/>
+      <stop offset="100%" stop-color="#0e0e10"/>
+    </linearGradient>
+    <linearGradient id="screen" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1c1c22"/>
+      <stop offset="100%" stop-color="#111114"/>
+    </linearGradient>
+    <linearGradient id="purple" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8b7cf6"/>
+      <stop offset="100%" stop-color="#5b3ff0"/>
+    </linearGradient>
+    <linearGradient id="teal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="100%" stop-color="#0f9d6e"/>
+    </linearGradient>
+    <linearGradient id="orange" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fb923c"/>
+      <stop offset="100%" stop-color="#ea580c"/>
+    </linearGradient>
+    <linearGradient id="pink" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f472b6"/>
+      <stop offset="100%" stop-color="#db2777"/>
+    </linearGradient>
+    <filter id="soft" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000" flood-opacity="0.35"/>
+    </filter>
+    <filter id="iconshadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#000" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- phone frame -->
+  <rect x="20" y="10" width="360" height="500" rx="48" fill="url(#frame)" filter="url(#soft)"/>
+  <rect x="34" y="24" width="332" height="472" rx="36" fill="url(#screen)"/>
+
+  <!-- notch -->
+  <rect x="170" y="42" width="60" height="6" rx="3" fill="#ffffff" opacity="0.15"/>
+
+  <!-- label -->
+  <text x="200" y="80" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#ffffff" fill-opacity="0.5">tap an app</text>
+
+  <!-- app grid: 2x2 -->
+  <!-- Workspace -->
+  <g filter="url(#iconshadow)">
+    <rect x="80" y="110" width="88" height="88" rx="22" fill="url(#purple)"/>
+  </g>
+  <path d="M104 140h18v10h-18zM104 156h40v8h-40zM104 170h30v8h-30z" fill="#ffffff" opacity="0.9"/>
+  <text x="124" y="222" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#ffffff" fill-opacity="0.85">Workspace</text>
+
+  <!-- GitHub Stats -->
+  <g filter="url(#iconshadow)">
+    <rect x="232" y="110" width="88" height="88" rx="22" fill="url(#teal)"/>
+  </g>
+  <circle cx="276" cy="148" r="16" fill="none" stroke="#ffffff" stroke-width="4" opacity="0.9"/>
+  <path d="M276 132 v-6 M276 170 v-6 M260 148 h-6 M298 148 h-6" stroke="#ffffff" stroke-width="4" opacity="0.9"/>
+  <text x="276" y="222" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#ffffff" fill-opacity="0.85">GitHub Stats</text>
+
+  <!-- Quiz Sandbox -->
+  <g filter="url(#iconshadow)">
+    <rect x="80" y="240" width="88" height="88" rx="22" fill="url(#orange)"/>
+  </g>
+  <circle cx="124" cy="278" r="4" fill="#ffffff"/>
+  <path d="M112 292 q12 -20 24 0" stroke="#ffffff" stroke-width="4" fill="none" opacity="0.9"/>
+  <text x="124" y="352" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#ffffff" fill-opacity="0.85">Quiz Sandbox</text>
+
+  <!-- Contacts -->
+  <g filter="url(#iconshadow)">
+    <rect x="232" y="240" width="88" height="88" rx="22" fill="url(#pink)"/>
+  </g>
+  <circle cx="276" cy="270" r="10" fill="#ffffff" opacity="0.9"/>
+  <path d="M256 300 q20 -18 40 0" stroke="#ffffff" stroke-width="4" fill="none" opacity="0.9"/>
+  <text x="276" y="352" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#ffffff" fill-opacity="0.85">Contacts</text>
+
+  <!-- info panel -->
+  <rect x="60" y="380" width="280" height="90" rx="16" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+  <text x="80" y="405" font-family="Helvetica, Arial, sans-serif" font-size="13" font-weight="bold" fill="#ffffff">Workspace</text>
+  <rect x="80" y="415" width="60" height="18" rx="9" fill="#5b3ff0" fill-opacity="0.25"/>
+  <text x="110" y="428" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="9" fill="#a996ff">HTML</text>
+  <rect x="146" y="415" width="45" height="18" rx="9" fill="#5b3ff0" fill-opacity="0.25"/>
+  <text x="168" y="428" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="9" fill="#a996ff">JS</text>
+  <text x="80" y="452" font-family="Helvetica, Arial, sans-serif" font-size="10" fill="#ffffff" fill-opacity="0.55">Code-editor-style landing layout</text>
+
+  <!-- home bar -->
+  <rect x="165" y="480" width="70" height="4" rx="2" fill="#ffffff" opacity="0.2"/>
+</svg>
