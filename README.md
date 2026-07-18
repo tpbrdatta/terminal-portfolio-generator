@@ -1,80 +1,79 @@
 <div align="center">
 
-```
-$ ./init_portfolio.sh
+# ⚡ Terminal Portfolio Generator
 
-[✓] fetching github stats.......... done
-[✓] fetching leetcode stats........ done
-[✓] compiling workspace layout...... done
-[✓] injecting quiz sandbox.......... done
-[✓] deploying to gh-pages........... done (30.2s)
-
-> portfolio is LIVE at https://<you>.github.io/terminal-portfolio-generator
-```
-
-# ⚡ terminal-portfolio-generator
-
-**A code-workspace-themed portfolio that builds itself.**
-Fork it → open one issue → your portfolio is live. No HTML editing, ever.
-
-[![Build](https://img.shields.io/github/actions/workflow/status/tpbrdatta/terminal-portfolio-generator/build.yml?label=build&style=flat-square&color=39FF14&labelColor=0d1117)](../../actions)
-[![Pages](https://img.shields.io/badge/pages-live-39FF14?style=flat-square&labelColor=0d1117)](../../deployments)
-[![Last Deploy](https://img.shields.io/github/last-commit/tpbrdatta/terminal-portfolio-generator?label=last%20deploy&style=flat-square&color=39FF14&labelColor=0d1117)](../../commits/main)
-[![Stars](https://img.shields.io/github/stars/tpbrdatta/terminal-portfolio-generator?style=flat-square&color=39FF14&labelColor=0d1117)](../../stargazers)
+### Fork it. Fill one form. Your portfolio is live.
 
 <img src="assets/ss1.png" alt="Terminal portfolio workspace demo" width="800">
+
+<br>
+
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white)
+![GitHub Pages](https://img.shields.io/badge/GitHub_Pages-222222?style=for-the-badge&logo=githubpages&logoColor=white)
+
+<br>
+
+[![Build](https://img.shields.io/github/actions/workflow/status/tpbrdatta/terminal-portfolio-generator/build.yml?style=flat-square&color=8A2BE2&label=build)](../../actions)
+[![Stars](https://img.shields.io/github/stars/tpbrdatta/terminal-portfolio-generator?style=flat-square&color=FFD700&label=stars)](../../stargazers)
+[![Forks](https://img.shields.io/github/forks/tpbrdatta/terminal-portfolio-generator?style=flat-square&color=00BFFF&label=forks)](../../forks)
+[![License](https://img.shields.io/badge/license-MIT-32CD32?style=flat-square)](LICENSE)
 
 </div>
 
 ---
 
-## `$ diff traditional-portfolio.html this-repo`
+## 🌈 What is this?
 
-| | Traditional Portfolio | terminal-portfolio-generator |
-|---|---|---|
-| Setup | Manual HTML editing | Fill one GitHub Issue |
-| Data | Static, goes stale | Live GitHub + LeetCode stats |
-| Aesthetic | Generic template | Code-workspace / terminal theme |
-| Updates | Re-edit and redeploy by hand | Re-run the Action, auto-redeploys |
-| Interactivity | None | Built-in quiz sandbox |
-| Hosting | You configure it | GitHub Pages, wired in already |
+A **code-workspace-themed portfolio** that builds and deploys itself. No manual HTML editing, no server, no dashboard — just a GitHub Issue and a workflow that does the rest.
+
+<table>
+<tr>
+<td width="33%" align="center">🧩 <b>Zero-code setup</b><br><sub>Fork → fill a form → done</sub></td>
+<td width="33%" align="center">📊 <b>Live data</b><br><sub>Real-time GitHub + LeetCode stats</sub></td>
+<td width="33%" align="center">🎮 <b>Interactive</b><br><sub>Built-in quiz sandbox</sub></td>
+</tr>
+</table>
 
 ---
 
-## `$ choose --setup-path`
+## 🆚 Traditional Portfolio vs. This
 
-```
-┌─────────────────────────────────────────────┐
-│   SELECT YOUR SETUP PATH                     │
-│                                               │
-│   [A] No-Code  — fork, fill a form, done      │
-│   [B] Terminal — clone it, run it yourself    │
-│                                               │
-└─────────────────────────────────────────────┘
-```
+| | 😩 Traditional | 🚀 terminal-portfolio-generator |
+|---|---|---|
+| Setup | Manual HTML editing | Fill one GitHub Issue |
+| Data | Static, goes stale | 🔄 Live GitHub + LeetCode stats |
+| Aesthetic | Generic template | 💻 Code-workspace theme |
+| Updates | Re-edit & redeploy by hand | ⚙️ Re-run the Action |
+| Interactivity | None | 🧠 Quiz sandbox included |
+| Hosting | You configure it | 🌐 GitHub Pages, wired in |
 
-<details>
-<summary><b>[A] No-Code / Click-and-Go</b> — no terminal, no editor required</summary>
+---
 
-<br>
+## 🛣️ Pick Your Path
 
-1. **Fork this repo** — click **Fork** at the top right.
-2. **Enable workflow permissions**
-   `Settings → Actions → General → Workflow permissions → Read and write permissions → Save`
-3. **Turn on GitHub Pages**
-   `Settings → Pages → Build and deployment → Source: Deploy from a branch → Branch: gh-pages → / (root) → Save`
-   *(the `gh-pages` branch appears automatically after step 4)*
-4. **Trigger the build**
-   `Issues → New Issue → fill in your profile details → Submit → add label` `profile-setup`
+<table>
+<tr>
+<td width="50%" valign="top">
 
-Your portfolio compiles and deploys in under 30 seconds.
+### 🎨 Path A — No Code
 
-</details>
+*Perfect if you've never touched a terminal.*
 
-<details>
-<summary><b>[B] Terminal Wizard</b> — for developers who want local control</summary>
+1. **Fork** this repo (top right ↗️)
+2. `Settings → Actions → General → Workflow permissions` → enable **Read and write**
+3. `Settings → Pages` → source: **Deploy from a branch** → `gh-pages` → `/ (root)`
+4. `Issues → New Issue` → fill in your details → label it `profile-setup`
 
-<br>
+✅ Live in under 30 seconds.
+
+</td>
+<td width="50%" valign="top">
+
+### 🧙 Path B — Developer
+
+*For anyone who wants local control.*
 
 ```bash
 git clone https://github.com/YOUR-USERNAME/terminal-portfolio-generator.git
@@ -83,137 +82,78 @@ npm install
 python build.py --local
 ```
 
-Edit `template.html` directly, run `build.py` to regenerate `index.html`, then push — the Action takes over from there.
-
-</details>
-
----
-
-## `$ cat pipeline.md`
-
-```mermaid
-flowchart LR
-    A[Issue submitted<br/>profile-setup label] --> B[GitHub Actions<br/>triggered]
-    B --> C[Parses issue form<br/>+ fetches GitHub/LeetCode APIs]
-    C --> D[build.py renders<br/>template.html → index.html]
-    D --> E[Pushes to<br/>gh-pages branch]
-    E --> F[GitHub Pages<br/>serves the site]
-```
-
-## `$ man under-the-hood`
-
-There's no dashboard, no backend, and no database here — the entire system runs on GitHub's own primitives. A profile-setup issue is really a structured form; the Action parses its labeled fields the moment it's submitted, pulls fresh stats from the GitHub and LeetCode APIs, and hands them to `build.py`, which stamps them into `template.html` to produce a static `index.html`. That file is pushed straight to `gh-pages`, and GitHub Pages does the rest. The result: a portfolio that updates itself every time you re-run the workflow, with zero servers to maintain.
-
----
-
-## `$ ls workspace/tabs/`
-
-*(example screenshots — replace with your own once your portfolio is live)*
-
-<div align="center">
-<img src="assets/phone-mockup.svg" alt="App preview" width="280">
-
-<p><sub>tap an app below to see its details</sub></p>
-</div>
-
-<br>
-
-<table>
-<tr>
-<td width="50%" valign="top">
-
-<details>
-<summary><b>🟣 Workspace</b></summary>
-<br>
-
-![HTML](https://img.shields.io/badge/HTML-5b3ff0?style=flat-square&labelColor=1c1c22)
-![JS](https://img.shields.io/badge/JS-5b3ff0?style=flat-square&labelColor=1c1c22)
-![UI](https://img.shields.io/badge/Code--editor%20UI-5b3ff0?style=flat-square&labelColor=1c1c22)
-
-The landing layout, styled like a code editor with tabbed navigation.
-
-<img src="assets/ss1.png" width="100%">
-
-</details>
-
-</td>
-<td width="50%" valign="top">
-
-<details>
-<summary><b>🟢 GitHub Stats</b></summary>
-<br>
-
-![Live API](https://img.shields.io/badge/Live%20API-0f9d6e?style=flat-square&labelColor=1c1c22)
-![Contributions](https://img.shields.io/badge/Contributions-0f9d6e?style=flat-square&labelColor=1c1c22)
-![Repos](https://img.shields.io/badge/Repos-0f9d6e?style=flat-square&labelColor=1c1c22)
-
-Pulls your live GitHub contribution graph and repo data on every build.
-
-<img src="assets/ss2.png" width="100%">
-
-</details>
-
-</td>
-</tr>
-<tr>
-<td width="50%" valign="top">
-
-<details>
-<summary><b>🟠 Quiz Sandbox</b></summary>
-<br>
-
-![Interactive](https://img.shields.io/badge/Interactive-ea580c?style=flat-square&labelColor=1c1c22)
-![Customizable](https://img.shields.io/badge/Customizable-ea580c?style=flat-square&labelColor=1c1c22)
-
-A built-in quiz widget visitors can play, configurable per topic.
-
-<img src="assets/ss3.png" width="100%">
-
-</details>
-
-</td>
-<td width="50%" valign="top">
-
-<details>
-<summary><b>🩷 Contacts</b></summary>
-<br>
-
-![Socials](https://img.shields.io/badge/Socials-db2777?style=flat-square&labelColor=1c1c22)
-![Customizable](https://img.shields.io/badge/Customizable-db2777?style=flat-square&labelColor=1c1c22)
-
-An interactive panel linking out to your social and contact channels.
-
-<img src="assets/ss4.png" width="100%">
-
-</details>
+Edit `template.html`, rebuild, push. The Action deploys it.
 
 </td>
 </tr>
 </table>
+
 ---
 
-## `$ fork --countdown`
+## ⚙️ How It Works
 
+```mermaid
+flowchart LR
+    A[📝 Issue submitted] --> B[🤖 GitHub Actions triggered]
+    B --> C[📡 Fetches GitHub + LeetCode data]
+    C --> D[🐍 build.py renders template.html]
+    D --> E[📦 Pushes to gh-pages]
+    E --> F[🌐 Live on GitHub Pages]
+
+    style A fill:#8A2BE2,color:#fff
+    style B fill:#2088FF,color:#fff
+    style C fill:#00BFFF,color:#fff
+    style D fill:#3776AB,color:#fff
+    style E fill:#FFD700,color:#000
+    style F fill:#32CD32,color:#000
 ```
-[3] preparing to fork...
-[2] setting up your workspace...
-[1] going live...
-[0] → https://<you>.github.io/terminal-portfolio-generator
-```
 
-**[Fork this repo now →](../../fork)**
+There's no backend and no database — just GitHub's own primitives, chained together. An issue is really a structured form; the moment it's labeled, the Action parses it, pulls fresh stats from the GitHub and LeetCode APIs, and hands everything to `build.py`, which stamps it into `template.html`. The result gets pushed to `gh-pages`, and GitHub Pages takes it from there.
 
-### Roadmap
+---
 
-- [ ] Additional quiz categories
-- [ ] Theme customization (beyond the default terminal palette)
-- [ ] More stat integrations (Codeforces, Kaggle, etc.)
-- [ ] One-click theme switcher in the generated site
+## 🖼️ Preview
+
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="assets/ss1.png" alt="Workspace tab screenshot" width="100%"><br>
+      <sub>💻 <b>Workspace</b> — the code-editor-style landing layout</sub>
+    </td>
+    <td align="center" width="50%">
+      <img src="assets/ss2.png" alt="GitHub stats tab screenshot" width="100%"><br>
+      <sub>📊 <b>GitHub Stats</b> — live-pulled contribution and repo data</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="assets/ss3.png" alt="LeetCode stats tab screenshot" width="100%"><br>
+      <sub>🧮 <b>LeetCode Stats</b> — real-time problem-solving performance</sub>
+    </td>
+    <td align="center" width="50%">
+      <img src="assets/ss4.png" alt="Quiz sandbox tab screenshot" width="100%"><br>
+      <sub>🎮 <b>Quiz Sandbox</b> — the interactive, customizable quiz panel</sub>
+    </td>
+  </tr>
+</table>
+
+*(example screenshots — replace with your own once your portfolio is live)*
+
+---
+
+## 🗺️ Roadmap
+
+- [ ] 🧩 Additional quiz categories
+- [ ] 🎨 Theme customization
+- [ ] 📈 More stat integrations (Codeforces, Kaggle, etc.)
+- [ ] 🌓 One-click theme switcher in the generated site
 
 ---
 
 <div align="center">
 
-`built with GitHub Actions, python, and a refusal to write portfolio HTML by hand`
+### 🚀 [Fork this repo →](../../fork)
+
+**built with** ![HTML5](https://img.shields.io/badge/-HTML5-E34F26?style=flat-square&logo=html5&logoColor=white) ![JavaScript](https://img.shields.io/badge/-JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black) ![Python](https://img.shields.io/badge/-Python-3776AB?style=flat-square&logo=python&logoColor=white) ![GitHub Actions](https://img.shields.io/badge/-GitHub_Actions-2088FF?style=flat-square&logo=githubactions&logoColor=white)
 
 </div>
