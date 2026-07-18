@@ -86,25 +86,6 @@ body:
     validations:
       required: false
 
-  - type: dropdown
-    id: social_platforms
-    attributes:
-      label: "Social Platforms"
-      description: "Pick every platform you want a link for. Then add the matching username/URL for each one below in 'Social Links'."
-      multiple: true
-      options:
-        - "LinkedIn"
-        - "X"
-        - "Instagram"
-        - "Facebook"
-        - "Reddit"
-        - "YouTube"
-        - "Discord"
-        - "Telegram"
-        - "Website"
-    validations:
-      required: false
-
   - type: textarea
     id: social_links
     attributes:
