@@ -22,7 +22,7 @@ Fork it → open one issue → your portfolio is live. No HTML editing, ever.
 [![Last Deploy](https://img.shields.io/github/last-commit/tpbrdatta/terminal-portfolio-generator?label=last%20deploy&style=flat-square&color=39FF14&labelColor=0d1117)](../../commits/main)
 [![Stars](https://img.shields.io/github/stars/tpbrdatta/terminal-portfolio-generator?style=flat-square&color=39FF14&labelColor=0d1117)](../../stargazers)
 
-*(Screen recording of the live workspace goes here — tabs switching, GitHub stats panel loading, quiz sandbox in action)*
+<img src="assets/ss1.png" alt="Terminal portfolio workspace demo" width="800">
 
 </div>
 
@@ -108,12 +108,30 @@ There's no dashboard, no backend, and no database here — the entire system run
 
 ## `$ ls workspace/tabs/`
 
-*(Screenshots go here, one per tab)*
+*(example screenshots — replace with your own once your portfolio is live)*
 
-- **Workspace** — the code-editor-style landing layout
-- **GitHub Stats** — live-pulled contribution and repo data
-- **LeetCode Stats** — real-time problem-solving performance
-- **Quiz Sandbox** — the interactive, customizable quiz panel
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="assets/ss1.png" alt="Workspace tab screenshot" width="100%"><br>
+      <sub><b>Workspace</b> — the code-editor-style landing layout</sub>
+    </td>
+    <td align="center" width="50%">
+      <img src="assets/ss2.png" alt="GitHub stats tab screenshot" width="100%"><br>
+      <sub><b>GitHub Stats</b> — live-pulled contribution and repo data</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="assets/ss3.png" alt="LeetCode stats tab screenshot" width="100%"><br>
+      <sub><b>LeetCode Stats</b> — real-time problem-solving performance</sub>
+    </td>
+    <td align="center" width="50%">
+      <img src="assets/ss4.png" alt="Quiz sandbox tab screenshot" width="100%"><br>
+      <sub><b>Quiz Sandbox</b> — the interactive, customizable quiz panel</sub>
+    </td>
+  </tr>
+</table>
 
 ---
 
